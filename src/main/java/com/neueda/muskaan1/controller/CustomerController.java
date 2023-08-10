@@ -1,4 +1,5 @@
 package com.neueda.muskaan1.controller;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
 import com.neueda.muskaan1.exception.CustomerNotFound;
