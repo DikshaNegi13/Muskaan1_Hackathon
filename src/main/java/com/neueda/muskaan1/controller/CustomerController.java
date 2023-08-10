@@ -1,5 +1,7 @@
 package com.neueda.muskaan1.controller;
 
+import com.neueda.muskaan1.exception.CustomerAlreadyExists;
+import com.neueda.muskaan1.exception.CustomerNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,12 +19,15 @@ public class CustomerController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable String id) {
-        return mongoRepository.findById(id).orElse(null);
+    public User getUserById(@PathVariable String id) throws CustomerNotFound {
+        return mongoRepository.findById(id).orElseThrow(
+                () -> new CustomerNotFound("User with "+ id + " not found!"));
     }
 
     @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
+    public User createUser(@RequestBody User user) throws CustomerAlreadyExists{
+        if(mongoRepository.existsById(user.getId()))
+            throw new CustomerAlreadyExists("User with "+ User.getId() + " already exists!");
         return mongoRepository.save(user);
     }
 
@@ -39,7 +44,9 @@ public class CustomerController {
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable String id) {
+    public void deleteUser (@PathVariable String id)throws CustomerNotFound {
+        if(!mongoRepository.existsById(id))
+            throw new CustomerNotFound("User with "+ id + " not found!");
         mongoRepository.deleteById(id);
     }
 }
