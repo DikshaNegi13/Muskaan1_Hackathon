@@ -1,11 +1,10 @@
 package com.neueda.muskaan1.controller;
 import com.neueda.muskaan1.entity.Customer;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.neueda.muskaan1.service.CustomerService;
 
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
 import com.neueda.muskaan1.exception.CustomerNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -14,40 +13,62 @@ import java.util.List;
 public class CustomerController {
 
     @Autowired
-    private MongoRepository mongoRepository;
+    private CustomerService customerService;
 
-    @GetMapping("/users")
-    public List<Customer> getAllUsers() {return mongoRepository.findAll();
+    @GetMapping("/{customer}")
+    public List<Customer> getAllUsers() {return customerService.getAllCustomer();
     }
 
-    @GetMapping("/Customer/{id}")
-    public Customer getUserById(@PathVariable String id) throws CustomerNotFound {
-        return mongoRepository.findById(id).orElseThrow(
-                () -> new CustomerNotFound("User with "+ id + " not found!"));
+
+    @PostMapping("/{customer}")
+    public Customer addCustomer(Customer customer) {
+//        if(customerService.getCustomerById(customer.getCustomer_id()))
+//            throw new CustomerAlreadyExists("User with "+ customer.getCustomer_id() + " already exists!");
+//        return (Customer) customerService.addCustomer(customer);
+//
+    try{
+        return this.customerService.addCustomer(customer);}
+    catch(CustomerAlreadyExists e){
+        System.out.println(e.getMessage());
+    }
+return null;
     }
 
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user) throws CustomerAlreadyExists{
-        if(mongoRepository.existsById(user.getId()))
-            throw new CustomerAlreadyExists("User with "+ User.getId() + " already exists!");
-        return mongoRepository.save(user);
+    @GetMapping("/{customer_id}")
+    public String getUserById(@PathVariable String id){
+//        return customerService.getCustomerById(id).orElseThrow(() -> new CustomerNotFound("User with "+ "id"+id));
+//        Customer savedEntity=this.repo.save(c);
+//        return savedEntity;
+
+        try{
+            return this.customerService.getCustomerById(id);}
+        catch(CustomerNotFound e){
+//            System.out.println(e.getMessage());
+//            throw new CustomerNotFound(e.);
+           return this.customerService;
+        }
+        return null;
+
+
     }
+//     if(repo.existsById(c.getCustomer_id())) throw new CustomerAlreadyExists("Customer with "+ c.getCustomer_id()+" already exists");
+
 
     @PutMapping("/users/{id}")
     public User updateUser(@PathVariable String id, @RequestBody User user) {
-        User existingUser = mongoRepository.findById(id).orElse(null);
+        User existingUser = customerService.findById(id).orElse(null);
         if (existingUser != null) {
             existingUser.setName(user.getName());
             existingUser.setEmail(user.getEmail());
 
-            return mongoRepository.save(existingUser);
+            return customerService.save(existingUser);
         }
         return null;
     }
 
     @DeleteMapping("/users/{id}")
     public void deleteUser (@PathVariable String id)throws CustomerNotFound {
-        if(!mongoRepository.existsById(id))
+        if(!customerService.existsById(id))
             throw new CustomerNotFound("User with "+ id + " not found!");
         mongoRepository.deleteById(id);
     }

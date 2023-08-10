@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -44,8 +43,8 @@ public class CustomerService {
             System.out.println("not found");
     }
 
-    public Optional<Customer> getCustomerById(String id) {
-        return this.repo.findById(id);
+    public String getCustomerById(String id) {
+        return String.valueOf(this.repo.findById(id));
     }
 
 
