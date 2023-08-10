@@ -44,7 +44,7 @@ public class CustomerService {
             System.out.println("not found");
     }
 
-    public Optional<Customer> getCutomerById(String id) {
+    public Optional<Customer> getCustomerById(String id) {
         return this.repo.findById(id);
     }
 

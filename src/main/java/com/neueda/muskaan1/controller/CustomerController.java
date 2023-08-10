@@ -1,4 +1,5 @@
 package com.neueda.muskaan1.controller;
+import com.neueda.muskaan1.entity.Customer;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
@@ -16,12 +17,11 @@ public class CustomerController {
     private MongoRepository mongoRepository;
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return mongoRepository.findAll();
+    public List<Customer> getAllUsers() {return mongoRepository.findAll();
     }
 
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable String id) throws CustomerNotFound {
+    @GetMapping("/Customer/{id}")
+    public Customer getUserById(@PathVariable String id) throws CustomerNotFound {
         return mongoRepository.findById(id).orElseThrow(
                 () -> new CustomerNotFound("User with "+ id + " not found!"));
     }
