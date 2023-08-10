@@ -1,5 +1,6 @@
 package com.neueda.muskaan1;
 
+import com.neueda.muskaan1.repo.ICustomerRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +23,8 @@ public class SpringBootWebApplication {
 		System.out.println(creditCardManagement.getCity());
 		System.out.println(creditCardManagement.getTransactionData());
 
+
+
 		CustomerService customerService = context.getBean(CustomerService.class);
 		customerService.getAllCustomers();
 		try {
@@ -32,6 +35,8 @@ public class SpringBootWebApplication {
 		}
 		customerService.getAllCustomers();
 	}
+	@Autowired
+	private ICustomerRepository repo;
 
 
 }

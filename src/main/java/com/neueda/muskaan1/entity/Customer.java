@@ -5,10 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Customer {
-
-   // private long id;
+    // private long id;
     @Id
-    private long customer_id;
+    private String customer_id;
     private String firstName;
     private String lastName;
     private String gender;
@@ -19,7 +18,7 @@ public class Customer {
         // Empty no-arg constructor.
     }
 
-    public Customer(long customer_id, String firstName, String lastName, String gender,
+    public Customer(String customer_id, String firstName, String lastName, String gender,
                     String job, long dob) {
         this.customer_id = customer_id;
         this.firstName = firstName;
@@ -29,11 +28,11 @@ public class Customer {
         this.dob = dob;
     }
 
-    public long getCustomer_id() {
+    public String getCustomer_id() {
         return customer_id;
     }
 
-    public void setCustomer_id(long customer_id) {
+    public void setCustomer_id(String customer_id) {
         this.customer_id = customer_id;
     }
 
