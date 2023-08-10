@@ -1,5 +1,6 @@
 package com.neueda.muskaan1.repo;
 
-public interface customer {
-  public customer   extends MongoRepository<customerdata, String>
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface customer  extends MongoRepository< customer, String> {
 }
