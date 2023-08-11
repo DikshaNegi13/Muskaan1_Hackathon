@@ -20,11 +20,12 @@ public class CustomerService {
     //methods
 
     public Customer addCustomer(Customer c) throws CustomerAlreadyExists {
+
      if(repo.existsById(c.getCustomer_id()))
          throw new CustomerAlreadyExists("Customer with "+ c.getCustomer_id()+" already exists");
         return this.repo.save(c);
     }
-//    public long getCount(){
+    //    public long getCount(){
 //        return this.repo.count();
 //    }
     public List<Customer>getAllCustomer(){
@@ -58,4 +59,4 @@ public class CustomerService {
 
 
 
-}
+
