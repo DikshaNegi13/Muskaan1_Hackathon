@@ -1,26 +1,31 @@
 package com.neueda.muskaan1.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.Date;
 
 
 @Document
 public class Customer {
-    // private long id;
     @Id
-    private String customer_id;
+
+    private String customerId;
+    @Field("first")
     private String firstName;
+    @Field("last")
     private String lastName;
     private String gender;
     private String job;
-    private long dob;
+    private String dob;
 
     public Customer() {
         // Empty no-arg constructor.
     }
 
-    public Customer(String customer_id, String firstName, String lastName, String gender,
-                    String job, long dob) {
-        this.customer_id = customer_id;
+    public Customer(String customerId, String firstName, String lastName, String gender,
+                    String job, String  dob) {
+        this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -28,12 +33,12 @@ public class Customer {
         this.dob = dob;
     }
 
-    public String getCustomer_id() {
-        return customer_id;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(String customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getFirstName() {
@@ -68,18 +73,18 @@ public class Customer {
         this.job = job;
     }
 
-    public long getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(long dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
     @Override
     public String toString() {
         return "Customer{" +
-                "customer_id=" + customer_id +
+                "customer_id=" + customerId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", gender='" + gender + '\'' +
