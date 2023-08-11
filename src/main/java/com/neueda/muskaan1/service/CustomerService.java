@@ -1,7 +1,7 @@
 package com.neueda.muskaan1.service;
 
 import com.neueda.muskaan1.entity.Customer;
-import com.neueda.muskaan1.exception.CustomerAlreadyExists;
+import com.neueda.muskaan1.exception.*;
 import com.neueda.muskaan1.repo.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,26 +16,27 @@ public class CustomerService {
     //methods
 
     public Customer addCustomer(Customer c) throws CustomerAlreadyExists {
-     if(repo.existsById(c.getCustomer_id())) throw new CustomerAlreadyExists("Customer with "+ c.getCustomer_id()+" already exists");
-      Customer savedEntity=this.repo.save(c);
-      return savedEntity;
+        if(repo.existsById(c.getCustomer_id())) throw new CustomerAlreadyExists("Customer with "+ c.getCustomer_id()+" already exists");
+        Customer savedEntity=this.repo.save(c);
+        return savedEntity;
     }
-//    public long getCount(){
+    //    public long getCount(){
 //        return this.repo.count();
 //    }
     public List<Customer>getAllCustomer(){
         return this.repo.findAll();
     }
-    public void updateCustomer(Customer dataToUpdate) {
+    public Customer updateCustomer(String customer_id, Customer dataToUpdate) {
         if (repo.existsById(dataToUpdate.getCustomer_id()))
         {
             repo.save((dataToUpdate));
         }
         else
             System.out.println("Customer not found");
+        return dataToUpdate;
     }
-    public void deleteCustomer(long id){
-        Customer c =repo.findById(String.valueOf(id)).orElse(null);
+    public void deleteCustomer(String id){
+        Customer c =repo.findById(id).orElse(null);
         if(c!=null){
             repo.save(c);
         }
@@ -43,9 +44,14 @@ public class CustomerService {
             System.out.println("not found");
     }
 
-    public String getCustomerById(String id) {
-        return String.valueOf(this.repo.findById(id));
+    public Customer getCustomerById(String id) throws CustomerNotFound {
+        Customer customer = repo.findById(id).orElse(null);
+        if (customer == null) {
+            throw new CustomerNotFound("Customer with ID " + id + " not found");
+        }
+        return customer;
     }
+
 
 
 }
