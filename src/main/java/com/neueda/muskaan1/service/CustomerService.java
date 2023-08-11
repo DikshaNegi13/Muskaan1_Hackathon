@@ -13,12 +13,17 @@ public class CustomerService {
 
     @Autowired
     private ICustomerRepository repo;
+
+    public CustomerService(ICustomerRepository repo) {
+        this.repo = repo;
+    }
     //methods
 
     public Customer addCustomer(Customer c) throws CustomerAlreadyExists {
-        if(repo.existsById(c.getCustomer_id())) throw new CustomerAlreadyExists("Customer with "+ c.getCustomer_id()+" already exists");
-        Customer savedEntity=this.repo.save(c);
-        return savedEntity;
+
+     if(repo.existsById(c.getCustomer_id()))
+         throw new CustomerAlreadyExists("Customer with "+ c.getCustomer_id()+" already exists");
+        return this.repo.save(c);
     }
     //    public long getCount(){
 //        return this.repo.count();
@@ -54,4 +59,4 @@ public class CustomerService {
 
 
 
-}
+
