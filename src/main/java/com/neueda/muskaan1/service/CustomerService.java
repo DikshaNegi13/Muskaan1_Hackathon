@@ -54,12 +54,12 @@ public class CustomerService {
         return customer;
     }
     public List<Customer> getCustomerByName(String customerName)  {
-        System.out.println(customerName+"Printing from service class");
+        System.out.println(customerName+ " Printing from service class");
         List<Customer> customerList = repo.findByFirstName(customerName);
         return customerList;
     }
     public List<Customer> getCustomerByLastName(String customerLastName)  {
-        System.out.println(customerLastName+" Printing from service class");
+        System.out.println(customerLastName + " Printing from service class");
         List<Customer> customerList = repo.findByLastName(customerLastName);
         return customerList;
     }
