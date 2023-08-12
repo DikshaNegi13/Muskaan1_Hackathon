@@ -1,4 +1,7 @@
 package com.neueda.muskaan1.entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -9,14 +12,28 @@ import java.util.Date;
 @Document
 public class Customer {
     @Id
-
     private String customerId;
+    @NotBlank(message = "Enter First Name")
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
     @Field("first")
     private String firstName;
+
+    @NotBlank(message = "Enter Last Name")
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid last name")
     @Field("last")
     private String lastName;
+
+    @NotBlank(message = "Enter Gennder")
+    @Pattern(regexp = "^(Male|Female)$", message = "Gender must be 'Male' or 'Female'")
     private String gender;
+
+    @NotBlank(message = "Enter Job")
+    @Pattern(regexp = "^(Student|Employed|Unemployed)$", message = "Invalid job status")
     private String job;
+
+    @NotBlank(message = "Date of birth is required")
+    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")
+    @Past(message = "Date of birth should be in the past")
     private String dob;
 
     public Customer() {
