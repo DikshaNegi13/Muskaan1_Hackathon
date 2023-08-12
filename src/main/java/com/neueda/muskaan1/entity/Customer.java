@@ -100,6 +100,7 @@ public class Customer {
 
     @Override
     public String toString() {
+        System.out.println("New");
         return "Customer{" +
                 "customer_id=" + customerId +
                 ", firstName='" + firstName + '\'' +
