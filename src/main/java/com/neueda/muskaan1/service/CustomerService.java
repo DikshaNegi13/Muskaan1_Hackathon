@@ -3,9 +3,11 @@ package com.neueda.muskaan1.service;
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.exception.*;
 import com.neueda.muskaan1.repo.ICustomerRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.validation.Validator;
 import java.util.List;
 
 @Service
@@ -13,12 +15,17 @@ public class CustomerService {
 
     @Autowired
     private ICustomerRepository repo;
+//    @Autowired
+//    private Validator validator;
     //methods
 
-    public Customer addCustomer(Customer c) throws CustomerAlreadyExists {
-        if(repo.existsById(c.getCustomerId())) throw new CustomerAlreadyExists("Customer with "+ c.getCustomerId()+" already exists");
-        Customer savedEntity=this.repo.save(c);
-        return savedEntity;
+    public Customer addCustomer(@Valid Customer c) throws CustomerAlreadyExists {
+        if (repo.existsById(c.getCustomerId())) {
+            throw new CustomerAlreadyExists("Customer with " + c.getCustomerId() + " already exists");
+        }
+        return repo.save(c);
+    }
+
     }
     //    public long getCount(){
 //        return this.repo.count();
@@ -26,15 +33,21 @@ public class CustomerService {
     public List<Customer>getAllCustomer(){
         return this.repo.findAll();
     }
-    public Customer updateCustomer(String customerId, Customer dataToUpdate) {
-        if (repo.existsById(dataToUpdate.getCustomerId()))
-        {
-            repo.save((dataToUpdate));
-        }
-        else
+    public Customer updateCustomer(String customerId, @Valid Customer dataToUpdate) {
+        Customer existingCustomer = repo.findById(customerId).orElse(null);
+        if (existingCustomer != null) {
+
+            // Ensures customerId is unchanged
+            dataToUpdate.setCustomerId(existingCustomer.getCustomerId());
+            // It takes the original customerId
+
+            return repo.save(dataToUpdate);
+        } else {
             System.out.println("Customer not found");
-        return dataToUpdate;
+            return null;
+        }
     }
+
     public void deleteCustomer(String customerId){
         Customer c =repo.findById(customerId).orElse(null);
         if(c!=null){
