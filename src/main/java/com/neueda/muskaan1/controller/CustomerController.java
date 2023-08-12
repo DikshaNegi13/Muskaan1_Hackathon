@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/customer")
 public class CustomerController {
 
     @Autowired
@@ -32,25 +32,37 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/{customer_id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable String customer_id) {
+    @GetMapping("/{customerId}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable String customerId) {
         try {
-            Customer customer = customerService.getCustomerById(customer_id);
+            System.out.println(customerId);
+            Customer customer = customerService.getCustomerById(customerId);
+            System.out.println(customer);
             return new ResponseEntity<>(customer, HttpStatus.OK);
         } catch (CustomerNotFound e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/name/{customerName}")
+    public ResponseEntity <List<Customer>> getCustomerByName(@PathVariable String customerName) {
+           List<Customer> customerList = customerService.getCustomerByName(customerName);
+            return ResponseEntity.ok(customerList);
+        }
+    @GetMapping("/lastname/{customerLastName}")
+    public ResponseEntity <List<Customer>> getCustomerByLastName(@PathVariable String customerLastName) {
+        List<Customer> customerList = customerService.getCustomerByLastName(customerLastName);
+        return ResponseEntity.ok(customerList);
+    }
 
-    @PutMapping("/{customer_id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable String customer_id, @RequestBody Customer customer) {
-        Customer updatedCustomer = customerService.updateCustomer(customer_id, customer);
+    @PutMapping("/{customerId}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable String customerId, @RequestBody Customer customer) {
+        Customer updatedCustomer = customerService.updateCustomer(customerId, customer);
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{customer_id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable String customer_id) {
-        customerService.deleteCustomer(customer_id);
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String customerId) {
+        customerService.deleteCustomer(customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
