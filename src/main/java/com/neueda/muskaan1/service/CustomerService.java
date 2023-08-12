@@ -59,7 +59,7 @@ public class CustomerService {
         return customerList;
     }
     public List<Customer> getCustomerByLastName(String customerLastName)  {
-        System.out.println(customerLastName+"Printing from service class");
+        System.out.println(customerLastName+" Printing from service class");
         List<Customer> customerList = repo.findByLastName(customerLastName);
         return customerList;
     }
