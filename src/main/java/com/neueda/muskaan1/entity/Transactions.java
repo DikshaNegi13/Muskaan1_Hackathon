@@ -7,25 +7,15 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("transaction")
 
 public class Transactions {
-    public class Id{
-        public String $oid;}
-    @org.springframework.data.annotation.Id
-        public Id _id;
+ @Id
+ public String customerId;
 
-    public Id get_id() {
-        return _id;
+    public String getTransDateTransTime() {
+        return transDateTransTime;
     }
 
-    public void set_id(Id _id) {
-        this._id = _id;
-    }
-
-    public String getTrans_date_trans_time() {
-        return trans_date_trans_time;
-    }
-
-    public void setTrans_date_trans_time(String trans_date_trans_time) {
-        this.trans_date_trans_time = trans_date_trans_time;
+    public void setTransDateTransTime(String transDateTransTime) {
+        this.transDateTransTime = transDateTransTime;
     }
 
     public double getAmt() {
@@ -36,20 +26,20 @@ public class Transactions {
         this.amt = amt;
     }
 
-    public int getTrans_num() {
-        return trans_num;
+    public int getTransactionNum() {
+        return transactionNum;
     }
 
-    public void setTrans_num(int trans_num) {
-        this.trans_num = trans_num;
+    public void setTransactionNum(int trans_num) {
+        this.transactionNum = transactionNum;
     }
 
-    public int getCustomer_id() {
-        return customer_id;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(int customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(String customer_id) {
+        this.customerId = customerId;
     }
 
     public String getCity() {
@@ -68,12 +58,12 @@ public class Transactions {
         this.state = state;
     }
 
-    public int getCity_population() {
-        return city_population;
+    public int getCityPopulation() {
+        return cityPopulation;
     }
 
-    public void setCity_population(int city_population) {
-        this.city_population = city_population;
+    public void setCityPopulation(int cityPopulation) {
+        this.cityPopulation = cityPopulation;
     }
 
     public String getMerchant() {
@@ -131,28 +121,30 @@ public class Transactions {
     public void setDob(String dob) {
         this.dob = dob;
     }
-
-    public String trans_date_trans_time;
+ @Field("trans_date_trans_time")
+    public String transDateTransTime;
         public double amt;
-        public int trans_num;
-        public int customer_id;
+        @Field("trans_num")
+        public int transactionNum;
+
         public String city;
         public String state;
-        public int city_population;
+        @Field("city_population")
+        public int cityPopulation;
         public String merchant;
         public String category;
         public String first;
         public String last;
 
-    public Transactions(Id _id, String trans_date_trans_time, double amt, int trans_num, int customer_id, String city, String state, int city_population, String merchant, String category, String first, String last, String gender, String job, String dob) {
-        this._id = _id;
-        this.trans_date_trans_time = trans_date_trans_time;
+    public Transactions(String transDateTransTime, double amt, int transactionNum, String customerId, String city, String state, int cityPopulation, String merchant, String category, String first, String last, String gender, String job, String dob) {
+
+        this.transDateTransTime = transDateTransTime;
         this.amt = amt;
-        this.trans_num = trans_num;
-        this.customer_id = customer_id;
+        this.transactionNum = transactionNum;
+        this.customerId = customerId;
         this.city = city;
         this.state = state;
-        this.city_population = city_population;
+        this.cityPopulation = cityPopulation;
         this.merchant = merchant;
         this.category = category;
         this.first = first;
@@ -169,14 +161,13 @@ public class Transactions {
     @Override
     public String toString() {
         return "Transactions{" +
-                "_id=" + _id +
-                ", trans_date_trans_time='" + trans_date_trans_time + '\'' +
+                ", transDateTransTime='" + transDateTransTime + '\'' +
                 ", amt=" + amt +
-                ", trans_num=" + trans_num +
-                ", customer_id=" + customer_id +
+                ", transactionNum=" + transactionNum +
+                ", customerIdd=" + customerId +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
-                ", city_population=" + city_population +
+                ", cityPopulation=" + cityPopulation +
                 ", merchant='" + merchant + '\'' +
                 ", category='" + category + '\'' +
                 ", first='" + first + '\'' +
