@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customer")
+@CrossOrigin
 public class CustomerController {
 
     @Autowired
@@ -33,27 +35,30 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable String customerId) {
-        try {
-            System.out.println(customerId);
-            Customer customer = customerService.getCustomerById(customerId);
-            System.out.println(customer);
-            return new ResponseEntity<>(customer, HttpStatus.OK);
-        } catch (CustomerNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable String customerId) throws CustomerNotFound {
+        Optional<Customer> customerList = customerService.getCustomerById(customerId);
+        return ResponseEntity.ok(customerList);
     }
     @GetMapping("/name/{customerName}")
     public ResponseEntity <List<Customer>> getCustomerByName(@PathVariable String customerName) {
            List<Customer> customerList = customerService.getCustomerByName(customerName);
             return ResponseEntity.ok(customerList);
         }
-    @GetMapping("/name/{customerLastName}")
+    @GetMapping("/lastname/{customerLastName}")
     public ResponseEntity <List<Customer>> getCustomerByLastName(@PathVariable String customerLastName) {
         List<Customer> customerList = customerService.getCustomerByLastName(customerLastName);
         return ResponseEntity.ok(customerList);
     }
-
+    @GetMapping("/gender/{customerGender}")
+    public ResponseEntity <List<Customer>> getCustomerByGender(@PathVariable String customerGender) {
+        List<Customer> customerList = customerService.getCustomerByGender(customerGender);
+        return ResponseEntity.ok(customerList);
+    }
+    @GetMapping("/job/{customerJob}")
+    public ResponseEntity <List<Customer>> getCustomerByJob(@PathVariable String customerJob) {
+        List<Customer> customerList = customerService.getCustomerByJob(customerJob);
+        return ResponseEntity.ok(customerList);
+    }
     @PutMapping("/{customerId}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable String customerId, @RequestBody Customer customer) {
         Customer updatedCustomer = customerService.updateCustomer(customerId, customer);

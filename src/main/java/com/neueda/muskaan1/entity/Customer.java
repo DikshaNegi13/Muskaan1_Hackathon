@@ -6,12 +6,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.Date;
-
 
 @Document
 public class Customer {
     @Id
+    @Field("customer_id")
     private String customerId;
     @NotBlank(message = "Enter First Name")
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
@@ -23,7 +22,7 @@ public class Customer {
     @Field("last")
     private String lastName;
 
-    @NotBlank(message = "Enter Gennder")
+    @NotBlank(message = "Enter Gender")
     @Pattern(regexp = "^(Male|Female)$", message = "Gender must be 'Male' or 'Female'")
     private String gender;
 
@@ -42,6 +41,8 @@ public class Customer {
 
     public Customer(String customerId, String firstName, String lastName, String gender,
                     String job, String  dob) {
+
+
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,11 +51,13 @@ public class Customer {
         this.dob = dob;
     }
 
+
+
     public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(String  customerId) {
         this.customerId = customerId;
     }
 
