@@ -1,5 +1,6 @@
 package com.neueda.muskaan1.entity;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -8,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Transactions {
     public class Id{
         public String $oid;}
+    @org.springframework.data.annotation.Id
         public Id _id;
 
     public Id get_id() {
