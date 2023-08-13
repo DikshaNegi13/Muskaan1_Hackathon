@@ -10,10 +10,16 @@ public interface ICustomerRepository extends MongoRepository<Customer,String> {
 
     boolean existsById(String customerId);
 
-    //Optional<Customer> findById(String id);
-    @Query("{customerId:'?0'}")
-    Optional<Customer> findByCustomerId(String customerId);
+//   Optional<Customer> findByCustomerId(String customerId);
 
     List<Customer> findByFirstName(String customerName);
     List<Customer> findByLastName(String customerLastName);
+    @Query("{customerId:'?0'}")
+    Optional<Customer> findById(String customerId);
+
+    List<Customer> findByJob(String customerJob);
+
+    List<Customer> findByGender(String customerGender);
+
+    //boolean existsById(Long customerId);
 }
