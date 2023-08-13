@@ -27,12 +27,12 @@ public class Customer {
     private String gender;
 
     @NotBlank(message = "Enter Job")
-    @Pattern(regexp = "^(Student|Employed|Unemployed)$", message = "Invalid job status")
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message   = "Invalid job status")
     private String job;
 
     @NotBlank(message = "Date of birth is required")
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")
-    @Past(message = "Date of birth should be in the past")
+//    @Past(message = "Date of birth should be in the past")
     private String dob;
 
     public Customer() {
