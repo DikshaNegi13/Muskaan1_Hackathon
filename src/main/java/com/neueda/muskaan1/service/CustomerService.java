@@ -19,8 +19,7 @@ public class CustomerService {
     public Customer addCustomer(@Valid Customer c) throws CustomerAlreadyExists {
         if (repo.existsById((c.getCustomerId())))
             throw new CustomerAlreadyExists("Customer with " + c.getCustomerId() + " already exists");
-        Customer savedCustomer = repo.save(c);
-        return savedCustomer;
+        return repo.save(c);
         }
 
 
