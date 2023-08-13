@@ -25,6 +25,7 @@ public class SpringBootWebApplication implements CommandLineRunner {
 		SpringApplication.run(SpringBootWebApplication.class, args);
 
 	}
+
 	@Autowired
 	private ICustomerRepository customerRepository;
 	public WebMvcConfigurer corsConfigurer() {
