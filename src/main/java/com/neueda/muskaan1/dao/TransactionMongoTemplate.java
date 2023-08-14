@@ -1,5 +1,6 @@
 package com.neueda.muskaan1.dao;
 
+import com.neueda.muskaan1.dto.CategoryAmount;
 import com.neueda.muskaan1.dto.MerchantAmount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -28,7 +29,16 @@ public class TransactionMongoTemplate {
         List<MerchantAmount> result =groupResults.getMappedResults();
         return result;
 
+        public List<CategoryAmount>getSpendingHistoryByCategory(){
+            GroupOperation groupByCategorySumAmount = group("category").sum("amt").as("total_amt");
+            MatchOperation allCategory = match(new Criteria("category").exists(true));
+            ProjectionOperation include = project("total_amt").and("category").previousOperation();
+            SortOperation sortByAmt =sort(Sort.by(Sort.Direction.DESC,"total_amt"));
 
+            Aggregation aggregationData =newAggregation(allMerchant,groupByMerchantSumAmount,sortByAmtDesc,includes);
+            AggregationResults<CategoryAmount> groupResult =mongoTemplate.aggregate(aggregationData,"category", CategoryAmount.class);
+            List<CategoryAmount> results =groupResult.getMappedResults();
+            return;
 
 
     }

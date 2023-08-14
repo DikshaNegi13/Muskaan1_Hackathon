@@ -29,4 +29,6 @@ public interface ITransactionRepo extends MongoRepository<Transactions, ObjectId
 })
   //  @Query("ORDER BY transactionNum ASC")
     List<Transactions> findAllByTransactionNum();
+
+    List<Transactions> findByCategory(String category);
 }

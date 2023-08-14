@@ -20,6 +20,11 @@ public class TransactionController {
         List<Transactions> customerList = transactionService.getSpendingHistoryByMerchant(customerMerchant);
         return ResponseEntity.ok(customerList);
     }
+    @GetMapping("/category/{CustomerCategory}")
+    public ResponseEntity<List<Transactions>> getCustomerByCategory(@PathVariable String customerCategory) {
+        List<Transactions> customerList = transactionService.getSpendingHistoryByCategory(customerCategory);
+        return ResponseEntity.ok(customerList);
+    }
     @GetMapping("/city/{customerCity}")
     public ResponseEntity<List<Transactions>> getCustomerByCity(@PathVariable String customerCity) {
         List<Transactions> customerList = transactionService.getSpendingHistoryByCity(customerCity);

@@ -19,6 +19,10 @@ public class TransactionService {
         List<Transactions> transactionsList = transactionRepo.findByMerchant(merchant);
         return transactionsList;
     }
+    public List<Transactions> getSpendingHistoryByCategory(String category) {
+        List<Transactions> transactionsList = transactionRepo.findByCategory(category);
+        return transactionsList;
+    }
 
     public List<Transactions> getSpendingHistoryByCity(String city) {
         System.out.println(city + " Printing from service class");
