@@ -3,7 +3,6 @@ import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.service.CustomerService;
 
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
-import com.neueda.muskaan1.exception.CustomerNotFound;
 import com.neueda.muskaan1.validation.ErrorResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,7 @@ import org.springframework.validation.FieldError;
 //import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.Binding;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -52,9 +49,13 @@ public class CustomerController {
     }
 
 
-    @GetMapping("/{customerId}")
-    public ResponseEntity<?> getCustomerById(@PathVariable String customerId) {
-        Optional<Customer> customer = customerService.getCustomerById(customerId);
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
+        Customer customer = customerService.getCustomerById(customerId);
+        if (customer==null) {
+            ErrorResponse errorResponse = new ErrorResponse("No customers found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
         return ResponseEntity.ok(customer);
     }
 
@@ -88,7 +89,7 @@ public class CustomerController {
     }
     @PutMapping("/{customerId}")
     public ResponseEntity<?> updateCustomer(
-            @PathVariable String customerId, @Valid @RequestBody Customer updatedCustomer, BindingResult bindingResult) {
+            @PathVariable int customerId, @Valid @RequestBody Customer updatedCustomer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ErrorResponse errorResponse = new ErrorResponse("Validation failed");
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -103,7 +104,7 @@ public class CustomerController {
 
 
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable String customerId) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
         customerService.deleteCustomer(customerId);
         return ResponseEntity.noContent().build();
     }

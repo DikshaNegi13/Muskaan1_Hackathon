@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -17,7 +16,7 @@ public class CustomerService {
     private ICustomerRepository repo;
 
     public Customer addCustomer(@Valid Customer c) throws CustomerAlreadyExists {
-        if (repo.existsById((c.getCustomerId())))
+        if (repo.existsById((c.getId())))
             throw new CustomerAlreadyExists("Customer with " + c.getCustomerId() + " already exists");
         return repo.save(c);
         }
@@ -30,8 +29,8 @@ public class CustomerService {
     public List<Customer>getAllCustomer(){
         return this.repo.findAll();
     }
-    public Customer updateCustomer(String customerId, @Valid Customer dataToUpdate) {
-        Customer existingCustomer = repo.findById(customerId).orElse(null);
+    public Customer updateCustomer(int customerId, @Valid Customer dataToUpdate) {
+        Customer existingCustomer = repo.findById(customerId);
         if (existingCustomer != null) {
 
             // Ensures customerId is unchanged
@@ -45,8 +44,8 @@ public class CustomerService {
         }
     }
 
-    public void deleteCustomer(String customerId){
-        Customer c =repo.findById(customerId).orElse(null);
+    public void deleteCustomer(int customerId){
+        Customer c =repo.findById(customerId);
         if(c!=null){
             repo.save(c);
         }
@@ -54,15 +53,16 @@ public class CustomerService {
             System.out.println("not found");
     }
 
-    public Optional<Customer> getCustomerById(String  customerId)  {
+    public Customer getCustomerById(int  customerId)  {
         System.out.println(customerId + "Printing");
-        Optional<Customer> customerList = repo.findById(customerId);
-        return customerList;
+        Customer c = repo.findById(customerId);
+        return c;
     }
 
     public List<Customer> getCustomerByName(String customerName)  {
         System.out.println(customerName+ " Printing from service class");
-        return repo.findByFirstName(customerName);
+        List<Customer> customerList = repo.findByFirstName(customerName);
+        return customerList;
     }
     public List<Customer> getCustomerByGender(String customerGender)  {
 
