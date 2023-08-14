@@ -25,6 +25,7 @@ public class SpringBootWebApplication implements CommandLineRunner {
 		SpringApplication.run(SpringBootWebApplication.class, args);
 
 	}
+
 	@Autowired
 	private ICustomerRepository customerRepository;
 	public WebMvcConfigurer corsConfigurer() {
@@ -39,10 +40,10 @@ public class SpringBootWebApplication implements CommandLineRunner {
 	@Bean
 	public void init() {
 		logger.info("CUSTOMER DATA ADDED");
-		customerRepository.save(new Customer("988","Aaron","Harvey","M","Tourist information centre manager","1974-12-23"));
-		customerRepository.save(new Customer("989","Ardiana","Murray","F","Tourist information centre manager","1986-11-21"));
-		customerRepository.save(new Customer("990","Alicia","Colon","F","Barrister", "1978-05-10"));
-		customerRepository.save(new Customer("991","John","Miller","M","Barrister", "1988-10-2000"));
+		customerRepository.save(new Customer(988,"Aaron","Harvey","M","Tourist information centre manager","1974-12-23"));
+		customerRepository.save(new Customer(989,"Ardiana","Murray","F","Tourist information centre manager","1986-11-21"));
+		customerRepository.save(new Customer(990,"Alicia","Colon","F","Barrister", "1978-05-10"));
+		customerRepository.save(new Customer(991,"John","Miller","M","Barrister", "1988-10-2000"));
 	}
 
 
