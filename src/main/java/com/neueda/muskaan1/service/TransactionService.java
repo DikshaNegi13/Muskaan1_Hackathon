@@ -25,15 +25,15 @@ public class TransactionService {
         return customerList;
     }
 
-    public List<Transactions> getSpendingHistoryByState(String transactionState) {
-        System.out.println(transactionState + " Printing from service class");
-        List<Transactions> customerList = transactionRepo.findByState(transactionState);
+    public List<Transactions> getSpendingHistoryByState(String state) {
+        System.out.println(state + " Printing from service class");
+        List<Transactions> customerList = transactionRepo.findByState(state);
         return customerList;
     }
 
 
-    public List<Transactions> geAllByTransactionNumAsc() {
+    public List<Transactions> geAllByTransactionNum() {
 
-        return transactionRepo.findAllByTransactionNumAsc();
+        return transactionRepo.findAllByTransactionNum();
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/transaction")
+@RequestMapping("/api/transaction")
 @CrossOrigin
 
 public class TransactionController {
@@ -25,15 +25,15 @@ public class TransactionController {
         List<Transactions> customerList = transactionService.getSpendingHistoryByCity(customerCity);
         return ResponseEntity.ok(customerList);
     }
-    @GetMapping("/state/{transState}")
-    public ResponseEntity<List<Transactions>> getCustomerByState(@PathVariable String transactionState) {
-        List<Transactions> customerList = transactionService.getSpendingHistoryByState(transactionState);
+    @GetMapping("/transactionStatus/{state}")
+    public ResponseEntity<List<Transactions>> getCustomerByState(@PathVariable String state) {
+        List<Transactions> customerList = transactionService.getSpendingHistoryByState(state);
         return ResponseEntity.ok(customerList);
     }
 
     @GetMapping("/{transNum}")
-    public List<Transactions> getAllByTransactionNumAsc() {
-       return transactionService.geAllByTransactionNumAsc();
+    public List<Transactions> getAllByTransactionNum() {
+       return transactionService.geAllByTransactionNum();
 
     }
 }

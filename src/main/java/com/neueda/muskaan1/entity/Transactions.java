@@ -1,5 +1,6 @@
 package com.neueda.muskaan1.entity;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -8,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 public class Transactions {
  @Id
+ private ObjectId id;
+ @Field("customer_id")
  public String customerId;
 
     public String getTransDateTransTime() {

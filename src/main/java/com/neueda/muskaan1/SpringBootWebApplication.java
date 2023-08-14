@@ -37,7 +37,7 @@ public class SpringBootWebApplication implements CommandLineRunner {
 			}
 		};
 	}
-	@Bean
+	/*@Bean
 	public void init() {
 		logger.info("CUSTOMER DATA ADDED");
 		customerRepository.save(new Customer(988,"Aaron","Harvey","M","Tourist information centre manager","1974-12-23"));
@@ -45,7 +45,7 @@ public class SpringBootWebApplication implements CommandLineRunner {
 		customerRepository.save(new Customer(990,"Alicia","Colon","F","Barrister", "1978-05-10"));
 		customerRepository.save(new Customer(991,"John","Miller","M","Barrister", "1988-10-2000"));
 	}
-
+*/
 
 	@Override
 	public void run(String... args) throws Exception {
