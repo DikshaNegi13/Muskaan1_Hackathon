@@ -1,6 +1,7 @@
 package com.neueda.muskaan1.dto;
 
 public class MerchantAmount {
+
     private String merchant;
     private double total_amt;
 

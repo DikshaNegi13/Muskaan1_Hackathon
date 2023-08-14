@@ -1,6 +1,7 @@
 package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.dto.CategoryAmount;
+import com.neueda.muskaan1.dto.GenderSpending;
 import com.neueda.muskaan1.dto.MerchantAmount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -45,5 +46,20 @@ public class TransactionMongoTemplate {
         return result;
 
     }
+
+    public List<GenderSpending> getSpendingHistoryByGender() {
+        GroupOperation groupByGenderSumAmount = group("customer.gender").sum("amt").as("total_amt");
+        MatchOperation allGender = match(new Criteria("customer.gender").exists(true));
+        ProjectionOperation includes = project("total_amt").and("customer.gender").previousOperation();
+        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation = newAggregation(allGender, groupByGenderSumAmount, sortByAmountDesc, includes);
+        AggregationResults<GenderSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", GenderSpending.class);
+        List<GenderSpending> result = groupResults.getMappedResults();
+        return result;
+    }
+
+    
+
 
 }
