@@ -20,8 +20,8 @@ public class TransactionService {
         return transactionsList;
     }
     public List<Transactions> getSpendingHistoryByCategory(String category) {
-        List<Transactions> transactionsList = transactionRepo.findByCategory(category);
-        return transactionsList;
+        List<Transactions> customerList=transactionRepo.findByCategory(category);
+        return customerList;
     }
 
     public List<Transactions> getSpendingHistoryByCity(String city) {

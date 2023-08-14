@@ -21,13 +21,13 @@ public class TransactionMongoTemplate {
     public List<CategoryAmount> getSpendingHistoryByCategory() {
         GroupOperation groupByCategorySumAmount = group("category").sum("amt").as("total_amt");
         MatchOperation allCategory = match(new Criteria("category").exists(true));
-        ProjectionOperation include = project("total_amt").and("category").previousOperation();
-        SortOperation sortByAmt = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+        ProjectionOperation includes = project("total_amt").and("category").previousOperation();
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
-        Aggregation aggregationData = newAggregation(allCategory, groupByCategorySumAmount, sortByAmt, include);
-        AggregationResults<CategoryAmount> groupResult = mongoTemplate.aggregate(aggregationData, "category", CategoryAmount.class);
-        List<CategoryAmount> results = groupResult.getMappedResults();
-        return results;
+        Aggregation aggregation= newAggregation(allCategory, groupByCategorySumAmount, sortByAmtDESC, includes);
+        AggregationResults<CategoryAmount> groupResults = mongoTemplate.aggregate(aggregation, "category", CategoryAmount.class);
+        List<CategoryAmount> result = groupResults.getMappedResults();
+        return result;
 
 
     }
