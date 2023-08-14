@@ -13,20 +13,18 @@ public interface ITransactionRepo extends MongoRepository<Transactions, ObjectId
     List<Transactions> findByCity(String customerCity);
 
     @Aggregation(pipeline = {
-            "{'$match':{'state':?0}}",
-            "{'$sample'':{size:?20}}",
-            "{'$sort':{'trans_num': 1}}"
-
+            "{'$match':{'state': ?0}}",
+            "{'$sample': {size: ?20}}",
+            "{'$sort': {'trans_num': 1}}"
     })
-
     List<Transactions> findByState(String state);
 
   //  List<Transactions> findByTransactionNum(Sort transactionNum);
-@Aggregation(pipeline = {
-        "{'$match:{'trans_num':?0}}",
-        "{'$sample'':{size:?20}}",
-        "{'$sort':{'trans_num': -1}}"
-})
+  @Aggregation(pipeline = {
+          "{'$match': {'trans_num': ?0}}",
+          "{'$sample': {size: ?20}}",
+          "{'$sort': {'trans_num': -1}}"
+  })
   //  @Query("ORDER BY transactionNum ASC")
     List<Transactions> findAllByTransactionNum();
 
