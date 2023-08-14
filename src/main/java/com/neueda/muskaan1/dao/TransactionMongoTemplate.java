@@ -63,7 +63,7 @@ public class TransactionMongoTemplate {
     public List<StateSpending> getSpendingHistoryByState() {
         GroupOperation groupByStateSumAmount = group("state").sum("amt").as("total_amt");
         MatchOperation allState = match(new Criteria("state").exists(true));
-        ProjectionOperation includes = project("total_amt").and("customer.state").previousOperation();
+        ProjectionOperation includes = project("total_amt").and("state").previousOperation();
         SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
         Aggregation aggregation = newAggregation(allState, groupByStateSumAmount, sortByAmountDesc, includes);
