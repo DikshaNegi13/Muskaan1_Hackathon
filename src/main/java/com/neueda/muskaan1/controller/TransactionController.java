@@ -20,7 +20,7 @@ public class TransactionController {
         List<Transactions> customerList = transactionService.getSpendingHistoryByMerchant(customerMerchant);
         return ResponseEntity.ok(customerList);
     }
-    @GetMapping("/category/{CustomerCategory}")
+    @GetMapping("/category/{customerCategory}")
     public ResponseEntity<List<Transactions>> getCustomerByCategory(@PathVariable String customerCategory) {
         List<Transactions> customerList = transactionService.getSpendingHistoryByCategory(customerCategory);
         return ResponseEntity.ok(customerList);
@@ -36,9 +36,4 @@ public class TransactionController {
         return ResponseEntity.ok(customerList);
     }
 
-    @GetMapping("/{transNum}")
-    public List<Transactions> getAllByTransactionNum() {
-       return transactionService.geAllByTransactionNum();
-
-    }
 }

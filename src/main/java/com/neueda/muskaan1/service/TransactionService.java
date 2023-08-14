@@ -36,9 +36,4 @@ public class TransactionService {
         return customerList;
     }
 
-
-    public List<Transactions> geAllByTransactionNum() {
-
-        return transactionRepo.findAllByTransactionNum();
-    }
 }
