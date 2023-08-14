@@ -180,7 +180,6 @@ public class Transactions {
                 ", dob='" + dob + '\'' +
                 '}';
     }
-
     public String dob;
     }
 

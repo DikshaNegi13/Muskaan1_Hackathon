@@ -1,17 +1,15 @@
 package com.neueda.muskaan1.dto;
 
-public class MerchantAmount {
-
-    private String merchant;
+public class GenderSpending {
+    private String gender;
     private double total_amt;
 
-
-    public String getMerchant() {
-        return merchant;
+    public String getGender() {
+        return gender;
     }
 
-    public void setMerchant(String merchant) {
-        this.merchant = merchant;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public double getTotal_amt() {
