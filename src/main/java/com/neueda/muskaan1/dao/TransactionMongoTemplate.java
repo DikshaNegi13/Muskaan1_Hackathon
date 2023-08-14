@@ -82,7 +82,7 @@ public class TransactionMongoTemplate {
                 .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
 
         // Group by spendingType and calculate total amount spent in each category
-        GroupOperation groupBySpendingTypeSumTotalAmount = group("spendingType").sum("amt").as("totalAmount");
+        GroupOperation groupBySpendingTypeSumTotalAmount = group("spendingType").sum("amt").as("total_amt");
         // Sort results by spendingType in ascending order
         SortOperation sortBySpendingType = sort(Sort.by(Sort.Direction.ASC, "spendingType"));
 
@@ -97,6 +97,28 @@ public class TransactionMongoTemplate {
         AggregationResults<AmountSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", AmountSpending.class);
         return groupResults.getMappedResults();
     }
+
+    // Show a list of top merchants where the user has spent the most.
+    // the getTopMerchants method aggregates transaction data by merchant and arranges the results in
+    // descending order based on total spending. Users can customize the output by specifying the
+    // number of top merchants to display using the optional query parameter "limit" (default 10? idk) with the /top-merchants endpoint.
+    // The returned data is structured using the TopMerchant DTO.
+
+    public List<TopMerchant> getTopMerchants(int limit) {
+        GroupOperation groupByMerchantSumAmount = group("merchant").sum("amt").as("totalSpending");
+        SortOperation sortByTotalSpendingDesc = sort(Sort.by(Sort.Direction.DESC, "totalSpending"));
+        LimitOperation limitResults = limit(limit);
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                groupByMerchantSumAmount,
+                sortByTotalSpendingDesc,
+                limitResults
+        );
+
+        AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction", TopMerchant.class);
+        return groupResults.getMappedResults();
+    }
+
 
 
 
