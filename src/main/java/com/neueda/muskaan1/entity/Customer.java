@@ -2,33 +2,16 @@ package com.neueda.muskaan1.entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.Index;
-
 
 @Document
 public class Customer {
-    public Customer(ObjectId id) {
-        this.id = id;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
     @Id
-    ObjectId id;
-
     @Field("customer_id")
-    private int customerId;
+    private String customerId;
     @NotBlank(message = "Enter First Name")
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
     @Field("first")
@@ -56,7 +39,7 @@ public class Customer {
         // Empty no-arg constructor.
     }
 
-    public Customer(int customerId, String firstName, String lastName, String gender,
+    public Customer(String customerId, String firstName, String lastName, String gender,
                     String job, String  dob) {
 
 
@@ -70,11 +53,11 @@ public class Customer {
 
 
 
-    public int getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int  customerId) {
+    public void setCustomerId(String  customerId) {
         this.customerId = customerId;
     }
 
