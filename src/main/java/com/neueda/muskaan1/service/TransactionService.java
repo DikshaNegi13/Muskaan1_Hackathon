@@ -1,9 +1,9 @@
 package com.neueda.muskaan1.service;
 
+import com.neueda.muskaan1.dao.TransactionMongoTemplate;
 import com.neueda.muskaan1.entity.Transactions;
-import com.neueda.muskaan1.repo.ITransactionRepo;
+import com.neueda.muskaan1.dao.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +12,10 @@ import java.util.List;
 public class TransactionService {
     @Autowired
     private ITransactionRepo transactionRepo;
+    @Autowired
+    private TransactionMongoTemplate dao;
 
     public List<Transactions> getSpendingHistoryByMerchant(String merchant) {
-        System.out.println(merchant + " Printing from service class");
         List<Transactions> transactionsList = transactionRepo.findByMerchant(merchant);
         return transactionsList;
     }

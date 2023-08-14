@@ -1,15 +1,11 @@
-package com.neueda.muskaan1.repo;
+package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.entity.Transactions;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
-import java.util.Objects;
 
 public interface ITransactionRepo extends MongoRepository<Transactions, ObjectId> {
     List<Transactions> findByMerchant(String merchant);

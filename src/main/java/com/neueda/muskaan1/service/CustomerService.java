@@ -2,7 +2,7 @@ package com.neueda.muskaan1.service;
 
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.exception.*;
-import com.neueda.muskaan1.repo.ICustomerRepository;
+import com.neueda.muskaan1.dao.ICustomerRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

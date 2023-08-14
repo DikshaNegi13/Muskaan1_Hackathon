@@ -1,8 +1,7 @@
-package com.neueda.muskaan1.repo;
+package com.neueda.muskaan1.dao;
 import com.neueda.muskaan1.entity.Customer;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
