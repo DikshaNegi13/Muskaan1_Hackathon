@@ -3,6 +3,7 @@ package com.neueda.muskaan1.dao;
 import com.neueda.muskaan1.dto.CategoryAmount;
 import com.neueda.muskaan1.dto.GenderSpending;
 import com.neueda.muskaan1.dto.MerchantAmount;
+import com.neueda.muskaan1.dto.StateSpending;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -59,7 +60,18 @@ public class TransactionMongoTemplate {
         return result;
     }
 
-    
+    public List<StateSpending> getSpendingHistoryByState() {
+        GroupOperation groupByStateSumAmount = group("state").sum("amt").as("total_amt");
+        MatchOperation allState = match(new Criteria("state").exists(true));
+        ProjectionOperation includes = project("total_amt").and("customer.state").previousOperation();
+        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation = newAggregation(allState, groupByStateSumAmount, sortByAmountDesc, includes);
+        AggregationResults<StateSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", StateSpending.class);
+        List<StateSpending> result = groupResults.getMappedResults();
+        return result;
+    }
+
 
 
 }
