@@ -3,15 +3,21 @@ import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.service.CustomerService;
 
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
-import com.neueda.muskaan1.exception.CustomerNotFound;
+import com.neueda.muskaan1.validation.ErrorResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+//import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/customer")
+@CrossOrigin
 public class CustomerController {
 
     @Autowired
@@ -23,34 +29,84 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ErrorResponse errorResponse = new ErrorResponse("Validation failed");
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorResponse.addValidationError(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
         try {
             Customer savedCustomer = customerService.addCustomer(customer);
-            return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
         } catch (CustomerAlreadyExists e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            ErrorResponse errorResponse = new ErrorResponse("Customer already exists");
+            errorResponse.addValidationError("customerId", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
     }
 
-    @GetMapping("/{customer_id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable String customer_id) {
-        try {
-            Customer customer = customerService.getCustomerById(customer_id);
-            return new ResponseEntity<>(customer, HttpStatus.OK);
-        } catch (CustomerNotFound e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
+        Customer customer = customerService.getCustomerById(customerId);
+        if (customer==null) {
+            ErrorResponse errorResponse = new ErrorResponse("No customers found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        return ResponseEntity.ok(customer);
     }
 
-    @PutMapping("/{customer_id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable String customer_id, @RequestBody Customer customer) {
-        Customer updatedCustomer = customerService.updateCustomer(customer_id, customer);
-        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+    @GetMapping("/name/{customerName}")
+    public ResponseEntity <?> getCustomerByName(@PathVariable String customerName) {
+        List<Customer> customerList = customerService.getCustomerByName(customerName);
+           if (customerList.isEmpty()) {
+               ErrorResponse errorResponse = new ErrorResponse("No customers found");
+               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+           }
+           return ResponseEntity.ok(customerList);
+        }
+    @GetMapping("/lastname/{customerLastName}")
+    public ResponseEntity <?> getCustomerByLastName(@PathVariable String customerLastName) {
+        List<Customer> customerList = customerService.getCustomerByLastName(customerLastName);
+        if (customerList.isEmpty()) {
+            ErrorResponse errorResponse = new ErrorResponse("No customers found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+        return ResponseEntity.ok(customerList);
+    }
+    @GetMapping("/gender/{customerGender}")
+    public ResponseEntity <List<Customer>> getCustomerByGender(@PathVariable String customerGender) {
+        List<Customer> customerList = customerService.getCustomerByGender(customerGender);
+        return ResponseEntity.ok(customerList);
+    }
+    @GetMapping("/job/{customerJob}")
+    public ResponseEntity <List<Customer>> getCustomerByJob(@PathVariable String customerJob) {
+        List<Customer> customerList = customerService.getCustomerByJob(customerJob);
+        return ResponseEntity.ok(customerList);
+    }
+    @PutMapping("/{customerId}")
+    public ResponseEntity<?> updateCustomer(
+            @PathVariable int customerId, @Valid @RequestBody Customer updatedCustomer, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ErrorResponse errorResponse = new ErrorResponse("Validation failed");
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorResponse.addValidationError(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        Customer updated = customerService.updateCustomer(customerId, updatedCustomer);
+        return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{customer_id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable String customer_id) {
-        customerService.deleteCustomer(customer_id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
+        customerService.deleteCustomer(customerId);
+        return ResponseEntity.noContent().build();
     }
+
 }
