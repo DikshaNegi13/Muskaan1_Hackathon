@@ -73,7 +73,7 @@ public class TransactionMongoTemplate {
         // Group transactions based on amount and categorize as lowValue and highValue
 
         GroupOperation groupBySpendingTypeSumAmount = group()
-                .sum(ConditionalOperators.when(Criteria.where("amt").lte(500)).then(1).otherwise(0)).as("lowValue")
+                .sum(ConditionalOperators.when(Criteria.where("amt").lte(100)).then(1).otherwise(0)).as("lowValue")
                 .sum(ConditionalOperators.when(Criteria.where("amt").gt(500)).then(1).otherwise(0)).as("highValue");
 
         // Calculate total spending count and determine spendingType (Low or High)
