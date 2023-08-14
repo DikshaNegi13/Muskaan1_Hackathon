@@ -62,8 +62,7 @@ public class CustomerService {
 
     public List<Customer> getCustomerByName(String customerName)  {
         System.out.println(customerName+ " Printing from service class");
-        List<Customer> customerList = repo.findByFirstName(customerName);
-        return customerList;
+        return repo.findByFirstName(customerName);
     }
     public List<Customer> getCustomerByGender(String customerGender)  {
 
