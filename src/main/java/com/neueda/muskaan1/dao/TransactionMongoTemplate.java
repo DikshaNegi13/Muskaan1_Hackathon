@@ -1,9 +1,6 @@
 package com.neueda.muskaan1.dao;
 
-import com.neueda.muskaan1.dto.CategoryAmount;
-import com.neueda.muskaan1.dto.GenderSpending;
-import com.neueda.muskaan1.dto.MerchantAmount;
-import com.neueda.muskaan1.dto.StateSpending;
+import com.neueda.muskaan1.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -71,6 +68,36 @@ public class TransactionMongoTemplate {
         List<StateSpending> result = groupResults.getMappedResults();
         return result;
     }
+
+    public List<AmountSpending> getSpendingHistoryByAmount() {
+        // Group transactions based on amount and categorize as lowValue and highValue
+
+        GroupOperation groupBySpendingTypeSumAmount = group()
+                .sum(ConditionalOperators.when(Criteria.where("amt").lte(500)).then(1).otherwise(0)).as("lowValue")
+                .sum(ConditionalOperators.when(Criteria.where("amt").gt(500)).then(1).otherwise(0)).as("highValue");
+
+        // Calculate total spending count and determine spendingType (Low or High)
+        ProjectionOperation projectSpendingTypeAndCount = project()
+                .and("lowValue").plus("highValue").as("totalSpending")
+                .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
+
+        // Group by spendingType and calculate total amount spent in each category
+        GroupOperation groupBySpendingTypeSumTotalAmount = group("spendingType").sum("amt").as("totalAmount");
+        // Sort results by spendingType in ascending order
+        SortOperation sortBySpendingType = sort(Sort.by(Sort.Direction.ASC, "spendingType"));
+
+        // Aggregation pipeline
+        Aggregation aggregation = Aggregation.newAggregation(
+                groupBySpendingTypeSumAmount,
+                projectSpendingTypeAndCount,
+                groupBySpendingTypeSumTotalAmount,
+                sortBySpendingType
+        );
+
+        AggregationResults<AmountSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", AmountSpending.class);
+        return groupResults.getMappedResults();
+    }
+
 
 
 
