@@ -38,11 +38,11 @@ public class CustomerServiceTest {
     @Test
     public void testAddCustomer_Success() throws CustomerAlreadyExists {
         Customer customer = new Customer();
-        customer.setCustomerId("1002");
+        customer.setCustomerId(1001);
         customer.setFirstName("John");
         customer.setLastName("Cole");
 
-        when(repo.existsById("1002")).thenReturn(false);
+        when(repo.existsById(1001)).thenReturn(false);
         when(repo.save(any(Customer.class))).thenReturn(customer);
 
         Customer result = service.addCustomer(customer);
