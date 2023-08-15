@@ -49,6 +49,15 @@ public class TransactionController {
         return transactionService.getSpendingHistoryByGender();
     }
 
+    @GetMapping("/spendingByAmount")
+    public List<AmountSpending> getSpendingByAmount() {
+        return transactionService.getSpendingHistoryByAmount();
+    }
+
+    @GetMapping("/topMerchants")
+    public List<TopMerchant> getTopMerchants(@RequestParam int limit) {
+        return transactionService.getTopMerchants(limit);
+    }
 
 
 }
