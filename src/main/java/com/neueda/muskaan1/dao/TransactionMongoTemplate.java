@@ -46,9 +46,9 @@ public class TransactionMongoTemplate {
     }
 
     public List<GenderSpending> getSpendingHistoryByGender() {
-        GroupOperation groupByGenderSumAmount = group("customer.gender").sum("amt").as("total_amt");
-        MatchOperation allGender = match(new Criteria("customer.gender").exists(true));
-        ProjectionOperation includes = project("total_amt").and("customer.gender").previousOperation();
+        GroupOperation groupByGenderSumAmount = group("gender").sum("amt").as("total_amt");
+        MatchOperation allGender = match(new Criteria("gender").exists(true));
+        ProjectionOperation includes = project("total_amt").and("gender").previousOperation();
         SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
         Aggregation aggregation = newAggregation(allGender, groupByGenderSumAmount, sortByAmountDesc, includes);
@@ -97,30 +97,4 @@ public class TransactionMongoTemplate {
         AggregationResults<AmountSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", AmountSpending.class);
         return groupResults.getMappedResults();
     }
-
-    // Show a list of top merchants where the user has spent the most.
-    // the getTopMerchants method aggregates transaction data by merchant and arranges the results in
-    // descending order based on total spending. Users can customize the output by specifying the
-    // number of top merchants to display using the optional query parameter "limit" (default 10? idk) with the /top-merchants endpoint.
-    // The returned data is structured using the TopMerchant DTO.
-
-    public List<TopMerchant> getTopMerchants(int limit) {
-        GroupOperation groupByMerchantSumAmount = group("merchant").sum("amt").as("totalSpending");
-        SortOperation sortByTotalSpendingDesc = sort(Sort.by(Sort.Direction.DESC, "totalSpending"));
-        LimitOperation limitResults = limit(limit);
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                groupByMerchantSumAmount,
-                sortByTotalSpendingDesc,
-                limitResults
-        );
-
-        AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction", TopMerchant.class);
-        return groupResults.getMappedResults();
-    }
-
-
-
-
-
 }

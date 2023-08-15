@@ -1,5 +1,7 @@
 package com.neueda.muskaan1.controller;
 
+import com.neueda.muskaan1.dao.TransactionMongoTemplate;
+import com.neueda.muskaan1.dto.*;
 import com.neueda.muskaan1.entity.Transactions;
 import com.neueda.muskaan1.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,9 @@ import java.util.List;
 
 public class TransactionController {
     @Autowired
-   private  TransactionService transactionService;
+    private  TransactionService transactionService;
+    @Autowired
+    private TransactionMongoTemplate transactionMongoTemplate;
     @GetMapping("/merchant/{customerMerchant}")
     public ResponseEntity<List<Transactions>> getCustomerByMerchant(@PathVariable String customerMerchant) {
         List<Transactions> customerList = transactionService.getSpendingHistoryByMerchant(customerMerchant);
@@ -35,6 +39,7 @@ public class TransactionController {
         List<Transactions> customerList = transactionService.getSpendingHistoryByState(state);
         return ResponseEntity.ok(customerList);
     }
+
 
 
 

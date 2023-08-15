@@ -36,4 +36,11 @@ public class TransactionService {
         return customerList;
     }
 
+    public List<Transactions> getSpendingHistoryByGender(String gender) {
+        System.out.println(gender + " Printing from service class");
+        List<Transactions> customerList = transactionRepo.findByGender(gender);
+        return customerList;
+    }
+
+
 }

@@ -28,5 +28,12 @@ public interface ITransactionRepo extends MongoRepository<Transactions, ObjectId
   //  @Query("ORDER BY transactionNum ASC")
     List<Transactions> findAllByTransactionNum();
 
+
+    @Aggregation(pipeline = {
+            "{$group: {_id: '$gender', totalSpending: {$sum: '$amt'}}}",
+            "{$sort: {totalSpending: -1}}"
+    })
+    List<Transactions> findByGender();
     List<Transactions> findByCategory(String category);
+
 }
