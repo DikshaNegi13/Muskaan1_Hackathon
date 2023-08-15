@@ -8,16 +8,13 @@ import java.util.List;
 
 public interface ITransactionRepo extends MongoRepository<Transactions, ObjectId> {
 
-    List<Transactions> findByCity(long customerCity);
+    List<Transactions> findByCity(String city);
 
 
-    List<Transactions> findByJob(String job);
 
-    List<Transactions> findByPopulation(long cityPopulation);
 
-    List<Transactions> findByState(String state);
 
-    List<Transactions> findByCategory(String category);
 
-    List<Transactions> findByMerchant(String merchant);
+
+
 }

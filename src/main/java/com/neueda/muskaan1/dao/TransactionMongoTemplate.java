@@ -6,10 +6,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -59,19 +57,16 @@ public class TransactionMongoTemplate {
         List<GenderAmount> result = groupResults.getMappedResults();
         return result;
     }
-
-
-
-    public List<Profession> getProfessionForCustomer()
+    public List<JobAmount> getSpendingHistoryByJob()
     {
-        GroupOperation groupByProfessionSumAmount = group("Job").sum("amt").as("total_amt");
-        MatchOperation allProfession = match(new Criteria("Job").exists(true));
+        GroupOperation groupByJobSumAmount = group("Job").sum("amt").as("total_amt");
+        MatchOperation allJob = match(new Criteria("Job").exists(true));
         ProjectionOperation includes = project("total_amt").and("Job").previousOperation();
-        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
-        Aggregation aggregation = newAggregation(allProfession, groupByProfessionSumAmount, sortByAmountDesc, includes);
-        AggregationResults<Profession> groupResults = mongoTemplate.aggregate(aggregation, "transaction", Profession.class);
-        List<Profession> result = groupResults.getMappedResults();
+        Aggregation aggregation= newAggregation(allJob, groupByJobSumAmount, sortByAmtDESC, includes);
+        AggregationResults<JobAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", JobAmount.class);
+        List<JobAmount> result = groupResults.getMappedResults();
         return result;
     }
 
