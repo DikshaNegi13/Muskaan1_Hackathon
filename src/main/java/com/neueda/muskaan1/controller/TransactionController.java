@@ -31,7 +31,7 @@ public class TransactionController {
     public List<StateAmount> getCustomerByState() {
         return transactionService.getSpendingHistoryByState();
     }
-    @GetMapping("/customerGender/{gender}")
+    @GetMapping("/total_amt/{gender}")
     public List<GenderAmount> getCustomerByGender() {
         return transactionService.getSpendingHistoryByGender();
     }
