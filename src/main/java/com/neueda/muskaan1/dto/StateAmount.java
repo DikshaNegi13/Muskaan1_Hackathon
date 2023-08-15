@@ -1,12 +1,8 @@
 package com.neueda.muskaan1.dto;
 
-public class StateSpending {
+public class StateAmount {
     private String state;
     private double total_amt;
-    public StateSpending(String state, double total_amt) {
-        this.state = state;
-        this.total_amt = total_amt;
-    }
 
     public String getState() {
         return state;
@@ -23,5 +19,4 @@ public class StateSpending {
     public void setTotal_amt(double total_amt) {
         this.total_amt = total_amt;
     }
-
 }
