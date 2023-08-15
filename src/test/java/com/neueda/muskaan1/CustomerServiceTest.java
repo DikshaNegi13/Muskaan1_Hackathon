@@ -3,7 +3,7 @@ package com.neueda.muskaan1;
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
 import com.neueda.muskaan1.exception.CustomerNotFound;
-import com.neueda.muskaan1.repo.ICustomerRepository;
+import com.neueda.muskaan1.dao.ICustomerRepository;
 import com.neueda.muskaan1.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
