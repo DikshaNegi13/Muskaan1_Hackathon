@@ -4,7 +4,6 @@ import com.neueda.muskaan1.dto.*;
 import com.neueda.muskaan1.entity.Transactions;
 import com.neueda.muskaan1.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,20 +19,27 @@ public class TransactionController {
     public List<MerchantAmount> getAmountForMerchant() {
         return transactionService.getMerchantAmount();
     }
+    @RequestMapping(value="/city", method =RequestMethod.GET)
+    public List<CityAmount> getAmountForCity() {
+        return transactionService.getSpendingHistoryByCity();
+    }
+    @RequestMapping(value = "/Job",method = RequestMethod.GET)
+    public List<JobAmount> getAmountByJob()
+    {
+        return transactionService.getSpendingHistoryByJob();
+    }
     @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public List<CategoryAmount> getCustomerByCategory() {
+    public List<CategoryAmount> getCustomerByCategory()
+    {
         return transactionService.getSpendingHistoryByCategory();
     }
-    @RequestMapping(value="/city_population",method = RequestMethod.GET)
-    public List<CityPopulation> getPopulationForCity()
+    @GetMapping("/city_population")
+    public <city_population> List<Transactions> getPopulationByCity(String city)
     {
-        return transactionService.getPopulationForCity();
+
+        return transactionService.getPopulationByCity(city);
     }
-    @RequestMapping(value="/Job",method = RequestMethod.GET)
-    public List<Profession> getProfessionForCustomer()
-    {
-        return transactionService.getProfessionForCustomer();
-    }
+
     @GetMapping("/{state}")
     public List<StateAmount> getCustomerByState() {
         return transactionService.getSpendingHistoryByState();
@@ -41,11 +47,6 @@ public class TransactionController {
     @GetMapping("/total_amt/{gender}")
     public List<GenderAmount> getCustomerByGender() {
         return transactionService.getSpendingHistoryByGender();
-    }
-    @GetMapping("/city/{customerCity}")
-    public ResponseEntity<List<Transactions>> getCustomerByCity(@PathVariable String customerCity) {
-        List<Transactions> customerList = transactionService.getSpendingHistoryByCity(customerCity);
-        return ResponseEntity.ok(customerList);
     }
 
 

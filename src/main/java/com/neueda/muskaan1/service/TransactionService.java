@@ -24,35 +24,25 @@ public class TransactionService {
     public List<CategoryAmount> getSpendingHistoryByCategory() {
         return dao.getSpendingHistoryByCategory();
     }
+    public List<JobAmount> getSpendingHistoryByJob() {
+        return dao.getSpendingHistoryByJob();
+    }
+
 
     public List<GenderAmount> getSpendingHistoryByGender() {
         return dao.getSpendingHistoryByGender();
     }
-    public List<Profession> getProfessionForCustomer()
-    {
-        return dao.getProfessionForCustomer();
+    public List<CityAmount> getSpendingHistoryByCity() {
+        return dao.getSpendingHistoryByCity();
     }
-    public List<CityPopulation> getPopulationForCity()
-    {
-        return dao.getPopulationForCity();
-    }
+
 public List<StateAmount> getSpendingHistoryByState()
     {
         return dao.getSpendingHistoryByState();
     }
-    public List<Transactions> getSpendingHistoryByCity(String city) {
+    public List<Transactions> getPopulationByCity(String city) {
         System.out.println(city + " Printing from service class");
         List<Transactions> customerList = transactionRepo.findByCity(city);
-        return customerList;
-    }
-    public List<Transactions> getProfessionForCustomer(String Job) {
-        System.out.println(Job + " Printing from service class");
-        List<Transactions> customerList = transactionRepo.findByJob(Job);
-        return customerList;
-    }
-    public List<Transactions> getPopulationForCity(long city_population) {
-        System.out.println(city_population + " Printing from service class");
-        List<Transactions> customerList = transactionRepo.findByPopulation(city_population);
         return customerList;
     }
 
