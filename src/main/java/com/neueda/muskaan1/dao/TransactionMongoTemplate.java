@@ -1,11 +1,14 @@
 package com.neueda.muskaan1.dao;
 
-import com.neueda.muskaan1.dto.*;
+import com.neueda.muskaan1.dto.CategoryAmount;
+import com.neueda.muskaan1.dto.MerchantAmount;
+import com.neueda.muskaan1.entity.Transactions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,13 +24,13 @@ public class TransactionMongoTemplate {
     public List<CategoryAmount> getSpendingHistoryByCategory() {
         GroupOperation groupByCategorySumAmount = group("category").sum("amt").as("total_amt");
         MatchOperation allCategory = match(new Criteria("category").exists(true));
-        ProjectionOperation includes = project("total_amt").and("category").previousOperation();
-        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+        ProjectionOperation include = project("total_amt").and("category").previousOperation();
+        SortOperation sortByAmt = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
-        Aggregation aggregation= newAggregation(allCategory, groupByCategorySumAmount, sortByAmtDESC, includes);
-        AggregationResults<CategoryAmount> groupResults = mongoTemplate.aggregate(aggregation, "category", CategoryAmount.class);
-        List<CategoryAmount> result = groupResults.getMappedResults();
-        return result;
+        Aggregation aggregationData = newAggregation(allCategory, groupByCategorySumAmount, sortByAmt, include);
+        AggregationResults<CategoryAmount> groupResult = mongoTemplate.aggregate(aggregationData, "category", CategoryAmount.class);
+        List<CategoryAmount> results = groupResult.getMappedResults();
+        return results;
 
 
     }
@@ -44,83 +47,16 @@ public class TransactionMongoTemplate {
         return result;
 
     }
-
-    public List<GenderSpending> getSpendingHistoryByGender() {
-        GroupOperation groupByGenderSumAmount = group("customer.gender").sum("amt").as("total_amt");
-        MatchOperation allGender = match(new Criteria("customer.gender").exists(true));
-        ProjectionOperation includes = project("total_amt").and("customer.gender").previousOperation();
-        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
-
-        Aggregation aggregation = newAggregation(allGender, groupByGenderSumAmount, sortByAmountDesc, includes);
-        AggregationResults<GenderSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", GenderSpending.class);
-        List<GenderSpending> result = groupResults.getMappedResults();
-        return result;
-    }
-
-    public List<StateSpending> getSpendingHistoryByState() {
-        GroupOperation groupByStateSumAmount = group("state").sum("amt").as("total_amt");
-        MatchOperation allState = match(new Criteria("state").exists(true));
-        ProjectionOperation includes = project("total_amt").and("state").previousOperation();
-        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
-
-        Aggregation aggregation = newAggregation(allState, groupByStateSumAmount, sortByAmountDesc, includes);
-        AggregationResults<StateSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", StateSpending.class);
-        List<StateSpending> result = groupResults.getMappedResults();
-        return result;
-    }
-
-    public List<AmountSpending> getSpendingHistoryByAmount() {
-        // Group transactions based on amount and categorize as lowValue and highValue
-
-        GroupOperation groupBySpendingTypeSumAmount = group()
-                .sum(ConditionalOperators.when(Criteria.where("amt").lte(100)).then(1).otherwise(0)).as("lowValue")
-                .sum(ConditionalOperators.when(Criteria.where("amt").gt(500)).then(1).otherwise(0)).as("highValue");
-
-        // Calculate total spending count and determine spendingType (Low or High)
-        ProjectionOperation projectSpendingTypeAndCount = project()
-                .and("lowValue").plus("highValue").as("totalSpending")
-                .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
-
-        // Group by spendingType and calculate total amount spent in each category
-        GroupOperation groupBySpendingTypeSumTotalAmount = group("spendingType").sum("amt").as("total_amt");
-        // Sort results by spendingType in ascending order
-        SortOperation sortBySpendingType = sort(Sort.by(Sort.Direction.ASC, "spendingType"));
-
-        // Aggregation pipeline
-        Aggregation aggregation = Aggregation.newAggregation(
-                groupBySpendingTypeSumAmount,
-                projectSpendingTypeAndCount,
-                groupBySpendingTypeSumTotalAmount,
-                sortBySpendingType
-        );
-
-        AggregationResults<AmountSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", AmountSpending.class);
-        return groupResults.getMappedResults();
-    }
-
-    // Show a list of top merchants where the user has spent the most.
-    // the getTopMerchants method aggregates transaction data by merchant and arranges the results in
-    // descending order based on total spending. Users can customize the output by specifying the
-    // number of top merchants to display using the optional query parameter "limit" (default 10? idk) with the /top-merchants endpoint.
-    // The returned data is structured using the TopMerchant DTO.
-
-    public List<TopMerchant> getTopMerchants(int limit) {
-        GroupOperation groupByMerchantSumAmount = group("merchant").sum("amt").as("totalSpending");
-        SortOperation sortByTotalSpendingDesc = sort(Sort.by(Sort.Direction.DESC, "totalSpending"));
-        LimitOperation limitResults = limit(limit);
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                groupByMerchantSumAmount,
-                sortByTotalSpendingDesc,
-                limitResults
-        );
-
-        AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction", TopMerchant.class);
-        return groupResults.getMappedResults();
-    }
-
-
-
-
-
+public List<Transactions> getPopulationForCity(long city_population)
+{
+Query query = new Query();
+    query.addCriteria(Criteria.where("transactions").is(city_population));
+    return mongoTemplate.find(query, Transactions.class);
+}
+public List<Transactions> getProfessionOfCustomer(String Job)
+{
+    Query query = new Query();
+    query.addCriteria(Criteria.where("transactions").is(Job));
+    return mongoTemplate.find(query, Transactions.class);
+}
 }

@@ -1,5 +1,7 @@
 package com.neueda.muskaan1.controller;
 
+import com.neueda.muskaan1.dto.CategoryAmount;
+import com.neueda.muskaan1.dto.MerchantAmount;
 import com.neueda.muskaan1.entity.Transactions;
 import com.neueda.muskaan1.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +17,25 @@ import java.util.List;
 public class TransactionController {
     @Autowired
    private  TransactionService transactionService;
-    @GetMapping("/merchant/{customerMerchant}")
-    public ResponseEntity<List<Transactions>> getCustomerByMerchant(@PathVariable String customerMerchant) {
-        List<Transactions> customerList = transactionService.getSpendingHistoryByMerchant(customerMerchant);
-        return ResponseEntity.ok(customerList);
+    @RequestMapping(value="/merchant", method =RequestMethod.GET)
+    public List<MerchantAmount> getMerchantAmount() {
+        return transactionService.getMerchantAmount();
     }
-    @GetMapping("/category/{customerCategory}")
-    public ResponseEntity<List<Transactions>> getCustomerByCategory(@PathVariable String customerCategory) {
-        List<Transactions> customerList = transactionService.getSpendingHistoryByCategory(customerCategory);
-        return ResponseEntity.ok(customerList);
+    @RequestMapping(value = "/category",method = RequestMethod.GET)
+    public List<CategoryAmount> getCustomerByCategory() {
+        return transactionService.getSpendingHistoryByCategory();
+    }
+    @GetMapping("/{state}")
+    public List<Transactions> getCustomerByState(@PathVariable String state) {
+        return transactionService.getSpendingHistoryByState(state);
+    }
+    @GetMapping("/customerGender/{gender}")
+    public List<Transactions> getCustomerByGender(@PathVariable String gender) {
+        return transactionService.getSpendingHistoryByGender(gender);
     }
     @GetMapping("/city/{customerCity}")
     public ResponseEntity<List<Transactions>> getCustomerByCity(@PathVariable String customerCity) {
         List<Transactions> customerList = transactionService.getSpendingHistoryByCity(customerCity);
-        return ResponseEntity.ok(customerList);
-    }
-    @GetMapping("/transactionStatus/{state}")
-    public ResponseEntity<List<Transactions>> getCustomerByState(@PathVariable String state) {
-        List<Transactions> customerList = transactionService.getSpendingHistoryByState(state);
         return ResponseEntity.ok(customerList);
     }
 
