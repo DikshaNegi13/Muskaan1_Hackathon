@@ -100,9 +100,10 @@ public class TransactionMongoTemplate {
                 .sum(ConditionalOperators.when(Criteria.where("amt").gt(500)).thenValueOf("amt").otherwise(0)).as("highValue");
 
         ProjectionOperation projectSpendingTypeAndCount = Aggregation.project()
-                .and("lowValue").as("totalSpending")
-                .and("highValue").as("totalSpending")
-                .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
+                .andExpression("totalSpending").as("totalSpending")
+                .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType")
+                .andExclude("_id");
+
 
         GroupOperation groupBySpendingTypeSumTotalAmount = Aggregation.group("spendingType")
                 .sum("totalSpending").as("total_amt");
