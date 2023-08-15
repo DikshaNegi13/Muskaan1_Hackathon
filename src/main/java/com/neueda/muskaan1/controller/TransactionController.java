@@ -1,7 +1,9 @@
 package com.neueda.muskaan1.controller;
 
 import com.neueda.muskaan1.dto.CategoryAmount;
+import com.neueda.muskaan1.dto.GenderAmount;
 import com.neueda.muskaan1.dto.MerchantAmount;
+import com.neueda.muskaan1.dto.StateAmount;
 import com.neueda.muskaan1.entity.Transactions;
 import com.neueda.muskaan1.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +28,12 @@ public class TransactionController {
         return transactionService.getSpendingHistoryByCategory();
     }
     @GetMapping("/{state}")
-    public List<Transactions> getCustomerByState(@PathVariable String state) {
-        return transactionService.getSpendingHistoryByState(state);
+    public List<StateAmount> getCustomerByState() {
+        return transactionService.getSpendingHistoryByState();
     }
     @GetMapping("/customerGender/{gender}")
-    public List<Transactions> getCustomerByGender(@PathVariable String gender) {
-        return transactionService.getSpendingHistoryByGender(gender);
+    public List<GenderAmount> getCustomerByGender() {
+        return transactionService.getSpendingHistoryByGender();
     }
     @GetMapping("/city/{customerCity}")
     public ResponseEntity<List<Transactions>> getCustomerByCity(@PathVariable String customerCity) {

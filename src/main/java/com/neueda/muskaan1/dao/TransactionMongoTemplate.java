@@ -1,13 +1,11 @@
 package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.dto.*;
-import com.neueda.muskaan1.entity.Transactions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -47,17 +45,29 @@ public class TransactionMongoTemplate {
 
     }
 
-    public List<Transactions> getSpendingHistoryByGender(String gender) {
-        Query query =new Query();
-        query.addCriteria(Criteria.where("gender").is(gender));
-        return mongoTemplate.find(query, Transactions.class);
+    public List<GenderAmount> getSpendingHistoryByGender() {
+        GroupOperation groupByGenderSumAmount = group("gender").sum("amt").as("total_amt");
+        MatchOperation allGender = match(new Criteria("gender").exists(true));
+        ProjectionOperation includes = project("total_amt").and("gender").previousOperation();
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
+        Aggregation aggregation= newAggregation(allGender, groupByGenderSumAmount, sortByAmtDESC, includes);
+        AggregationResults<GenderAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", GenderAmount.class);
+        List<GenderAmount> result = groupResults.getMappedResults();
+        return result;
     }
 
-    public List<Transactions> getSpendingHistoryByState(String state) {
-        Query query =new Query();
-        query.addCriteria(Criteria.where("state").is(state));
-        return mongoTemplate.find(query, Transactions.class);
+
+    public List<StateAmount> getSpendingHistoryByState() {
+        GroupOperation groupByStateSumAmount = group("state").sum("amt").as("total_amt");
+        MatchOperation allState = match(new Criteria("state").exists(true));
+        ProjectionOperation includes = project("total_amt").and("state").previousOperation();
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation= newAggregation(allState, groupByStateSumAmount, sortByAmtDESC, includes);
+        AggregationResults<StateAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", StateAmount.class);
+        List<StateAmount> result = groupResults.getMappedResults();
+        return result;
     }
 
 

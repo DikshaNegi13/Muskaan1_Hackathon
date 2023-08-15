@@ -49,7 +49,7 @@ public class CustomerController {
     }
 
 
-    @GetMapping("/customer/{customerId}")
+    @GetMapping("/{customerId}")
     public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
         Customer customer = customerService.getCustomerById(customerId);
         if (customer==null) {

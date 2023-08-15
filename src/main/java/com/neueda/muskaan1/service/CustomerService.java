@@ -30,7 +30,7 @@ public class CustomerService {
         return this.repo.findAll();
     }
     public Customer updateCustomer(int customerId, @Valid Customer dataToUpdate) {
-        Customer existingCustomer = repo.findById(customerId);
+        Customer existingCustomer = repo.findByCustomerId(customerId);
         if (existingCustomer != null) {
 
             // Ensures customerId is unchanged
@@ -45,7 +45,7 @@ public class CustomerService {
     }
 
     public void deleteCustomer(int customerId){
-        Customer c =repo.findById(customerId);
+        Customer c =repo.findByCustomerId(customerId);
         if(c!=null){
             repo.save(c);
         }
@@ -55,7 +55,7 @@ public class CustomerService {
 
     public Customer getCustomerById(int  customerId)  {
         System.out.println(customerId + "Printing");
-        Customer c = repo.findById(customerId);
+        Customer c = repo.findByCustomerId(customerId);
         return c;
     }
 
