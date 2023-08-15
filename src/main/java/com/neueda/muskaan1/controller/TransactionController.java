@@ -25,7 +25,7 @@ public class TransactionController {
         return transactionService.getSpendingHistoryByCategory();
     }
     @RequestMapping(value="/city_population",method = RequestMethod.GET)
-    public List<CityPopulation> getPopulationForCity()
+    public <city_population> List<Transactions> getPopulationForCity()
     {
         return transactionService.getPopulationForCity();
     }

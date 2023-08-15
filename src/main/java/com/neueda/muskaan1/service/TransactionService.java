@@ -32,10 +32,6 @@ public class TransactionService {
     {
         return dao.getProfessionForCustomer();
     }
-    public List<CityPopulation> getPopulationForCity()
-    {
-        return dao.getPopulationForCity();
-    }
 public List<StateAmount> getSpendingHistoryByState()
     {
         return dao.getSpendingHistoryByState();
@@ -45,14 +41,11 @@ public List<StateAmount> getSpendingHistoryByState()
         List<Transactions> customerList = transactionRepo.findByCity(city);
         return customerList;
     }
-    public List<Transactions> getProfessionForCustomer(String Job) {
-        System.out.println(Job + " Printing from service class");
-        List<Transactions> customerList = transactionRepo.findByJob(Job);
-        return customerList;
+    public List<Profession> getProfessionForCustomer() {
+        return dao.getProfessionForCustomer();
     }
-    public List<Transactions> getPopulationForCity(long city_population) {
-        System.out.println(city_population + " Printing from service class");
-        List<Transactions> customerList = transactionRepo.findByPopulation(city_population);
+    public List<Transactions> getPopulationForCustomer(long city_population) {
+        List<Transactions> customerList = transactionRepo.findByCity(city_population);
         return customerList;
     }
 

@@ -59,16 +59,9 @@ public class TransactionMongoTemplate {
         List<GenderAmount> result = groupResults.getMappedResults();
         return result;
     }
-    public List<CityPopulation> getPopulationForCity() {
-        return mongoTemplate.findAll(CityPopulation.class);
-    }
 
 
-    public CityPopulation getOrderById(long city_population) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("city_population").is(city_population));
-        return mongoTemplate.findOne(query, CityPopulation.class);
-    }
+
     public List<Profession> getProfessionForCustomer()
     {
         GroupOperation groupByProfessionSumAmount = group("Job").sum("amt").as("total_amt");

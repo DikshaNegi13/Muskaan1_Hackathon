@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ITransactionRepo extends MongoRepository<Transactions, ObjectId> {
 
-    List<Transactions> findByCity(String customerCity);
+    List<Transactions> findByCity(long customerCity);
 
 
     List<Transactions> findByJob(String job);
