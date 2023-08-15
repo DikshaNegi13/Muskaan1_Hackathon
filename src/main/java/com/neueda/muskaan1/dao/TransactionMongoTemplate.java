@@ -1,11 +1,13 @@
 package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.dto.*;
+import com.neueda.muskaan1.entity.Transactions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class TransactionMongoTemplate {
 
     }
 
-    public List<MerchantAmount> getSpendingHistoryByMerchant() {
+    public List<MerchantAmount> getAmountForMerchant() {
         GroupOperation groupByMerchantSumAmount = group("merchant").sum("amt").as("total_amt");
         MatchOperation allMerchant = match(new Criteria("merchant").exists(true));
         ProjectionOperation includes = project("total_amt").and("merchant").previousOperation();
@@ -45,29 +47,19 @@ public class TransactionMongoTemplate {
 
     }
 
-    public List<GenderSpending> getSpendingHistoryByGender() {
-        GroupOperation groupByGenderSumAmount = group("customer.gender").sum("amt").as("total_amt");
-        MatchOperation allGender = match(new Criteria("customer.gender").exists(true));
-        ProjectionOperation includes = project("total_amt").and("customer.gender").previousOperation();
-        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+    public List<Transactions> getSpendingHistoryByGender(String gender) {
+        Query query =new Query();
+        query.addCriteria(Criteria.where("transactions").is(gender));
+        return mongoTemplate.find(query, Transactions.class);
 
-        Aggregation aggregation = newAggregation(allGender, groupByGenderSumAmount, sortByAmountDesc, includes);
-        AggregationResults<GenderSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", GenderSpending.class);
-        List<GenderSpending> result = groupResults.getMappedResults();
-        return result;
     }
 
-    public List<StateSpending> getSpendingHistoryByState() {
-        GroupOperation groupByStateSumAmount = group("state").sum("amt").as("total_amt");
-        MatchOperation allState = match(new Criteria("state").exists(true));
-        ProjectionOperation includes = project("total_amt").and("state").previousOperation();
-        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
-
-        Aggregation aggregation = newAggregation(allState, groupByStateSumAmount, sortByAmountDesc, includes);
-        AggregationResults<StateSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", StateSpending.class);
-        List<StateSpending> result = groupResults.getMappedResults();
-        return result;
+    public List<Transactions> getSpendingHistoryByState(String state) {
+        Query query =new Query();
+        query.addCriteria(Criteria.where("transactions").is(state));
+        return mongoTemplate.find(query, Transactions.class);
     }
+
 
     public List<AmountSpending> getSpendingHistoryByAmount() {
         // Group transactions based on amount and categorize as lowValue and highValue
