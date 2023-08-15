@@ -95,23 +95,23 @@ public class TransactionMongoTemplate {
     }
 
     public List<AmountSpending> getSpendingHistoryByAmount() {
-        GroupOperation groupByAmountSumSpending = Aggregation.group()
-                .sum(ConditionalOperators.when(Criteria.where("amt").lte(500)).thenValueOf("amt").otherwise(0)).as("lowValue")
-                .sum(ConditionalOperators.when(Criteria.where("amt").gt(500)).thenValueOf("amt").otherwise(0)).as("highValue");
+        GroupOperation groupBySpendingTypeSumAmount = Aggregation.group()
+                .sum(ConditionalOperators.when(Criteria.where("amt").lte(100)).then(1).otherwise(0)).as("lowValue")
+                .sum(ConditionalOperators.when(Criteria.where("amt").gt(100)).then(1).otherwise(0)).as("highValue");
 
-        ProjectionOperation projectSpendingTypeAndCount = Aggregation.project()
-                .andExpression("totalSpending").as("totalSpending")
-                .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType")
-                .andExclude("_id");
-
+        ProjectionOperation projectSpendingTypeAndCount = Aggregation.project("amt", "lowValue", "highValue")
+                .andExpression("lowValue + highValue").as("totalSpending")
+                .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
 
         GroupOperation groupBySpendingTypeSumTotalAmount = Aggregation.group("spendingType")
-                .sum("totalSpending").as("total_amt");
+                .sum("totalSpending").as("totalSpending")
+                .sum(ConditionalOperators.when(Criteria.where("spendingType").is("Low")).thenValueOf("lowValue").otherwise(0)).as("lowValue")
+                .sum(ConditionalOperators.when(Criteria.where("spendingType").is("High")).thenValueOf("highValue").otherwise(0)).as("highValue");
 
         SortOperation sortBySpendingType = Aggregation.sort(Sort.Direction.ASC, "spendingType");
 
         Aggregation aggregation = Aggregation.newAggregation(
-                groupByAmountSumSpending,
+                groupBySpendingTypeSumAmount,
                 projectSpendingTypeAndCount,
                 groupBySpendingTypeSumTotalAmount,
                 sortBySpendingType
@@ -120,6 +120,8 @@ public class TransactionMongoTemplate {
         AggregationResults<AmountSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", AmountSpending.class);
         return groupResults.getMappedResults();
     }
+
+
 
     // Show a list of top merchants where the user has spent the most.
     // the getTopMerchants method aggregates transaction data by merchant and arranges the results in
