@@ -27,7 +27,7 @@ public class TransactionMongoTemplate {
         SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
         Aggregation aggregation= newAggregation(allCategory, groupByCategorySumAmount, sortByAmtDESC, includes);
-        AggregationResults<CategoryAmount> groupResults = mongoTemplate.aggregate(aggregation, "category", CategoryAmount.class);
+        AggregationResults<CategoryAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", CategoryAmount.class);
         List<CategoryAmount> result = groupResults.getMappedResults();
         return result;
 
@@ -41,7 +41,7 @@ public class TransactionMongoTemplate {
         SortOperation sortByAmtDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
         Aggregation aggregation = newAggregation(allMerchant, groupByMerchantSumAmount, sortByAmtDesc, includes);
-        AggregationResults<MerchantAmount> groupResults = mongoTemplate.aggregate(aggregation, "merchant", MerchantAmount.class);
+        AggregationResults<MerchantAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", MerchantAmount.class);
         List<MerchantAmount> result = groupResults.getMappedResults();
         return result;
 
@@ -49,14 +49,14 @@ public class TransactionMongoTemplate {
 
     public List<Transactions> getSpendingHistoryByGender(String gender) {
         Query query =new Query();
-        query.addCriteria(Criteria.where("transactions").is(gender));
+        query.addCriteria(Criteria.where("gender").is(gender));
         return mongoTemplate.find(query, Transactions.class);
 
     }
 
     public List<Transactions> getSpendingHistoryByState(String state) {
         Query query =new Query();
-        query.addCriteria(Criteria.where("transactions").is(state));
+        query.addCriteria(Criteria.where("state").is(state));
         return mongoTemplate.find(query, Transactions.class);
     }
 

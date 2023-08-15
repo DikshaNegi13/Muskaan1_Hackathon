@@ -22,7 +22,7 @@ public class TransactionController {
         return transactionService.getMerchantAmount();
     }
     @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public List<CategoryAmount> getCustomerByCategory() {
+    public List<CategoryAmount> getCustomerByCategory(String category) {
         return transactionService.getSpendingHistoryByCategory();
     }
     @GetMapping("/{state}")
