@@ -69,6 +69,18 @@ public class TransactionMongoTemplate {
         List<JobAmount> result = groupResults.getMappedResults();
         return result;
     }
+    public List<CityAmount> getSpendingHistoryByCity()
+    {
+        GroupOperation groupByCitySumAmount = group("city").sum("amt").as("total_amt");
+        MatchOperation allCity = match(new Criteria("city").exists(true));
+        ProjectionOperation includes = project("total_amt").and("city").previousOperation();
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation= newAggregation(allCity, groupByCitySumAmount, sortByAmtDESC, includes);
+        AggregationResults<CityAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", CityAmount.class);
+        List<CityAmount> result = groupResults.getMappedResults();
+        return result;
+    }
 
     public List<StateAmount> getSpendingHistoryByState() {
         GroupOperation groupByStateSumAmount = group("state").sum("amt").as("total_amt");

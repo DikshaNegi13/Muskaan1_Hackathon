@@ -19,6 +19,10 @@ public class TransactionController {
     public List<MerchantAmount> getAmountForMerchant() {
         return transactionService.getMerchantAmount();
     }
+    @RequestMapping(value="/city", method =RequestMethod.GET)
+    public List<CityAmount> getAmountForCity() {
+        return transactionService.getSpendingHistoryByCity();
+    }
     @RequestMapping(value = "/Job",method = RequestMethod.GET)
     public List<JobAmount> getAmountByJob()
     {

@@ -32,6 +32,9 @@ public class TransactionService {
     public List<GenderAmount> getSpendingHistoryByGender() {
         return dao.getSpendingHistoryByGender();
     }
+    public List<CityAmount> getSpendingHistoryByCity() {
+        return dao.getSpendingHistoryByCity();
+    }
 
 public List<StateAmount> getSpendingHistoryByState()
     {
