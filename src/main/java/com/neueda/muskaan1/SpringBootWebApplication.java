@@ -1,13 +1,11 @@
 package com.neueda.muskaan1;
 
-import com.neueda.muskaan1.dao.TransactionMongoTemplate;
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.dao.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -19,14 +17,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @SpringBootApplication
 @Validated
-public class SpringBootWebApplication {
+public class SpringBootWebApplication implements CommandLineRunner {
 	static Logger logger= Logger.getLogger(SpringBootWebApplication.class.getSimpleName());
 
 	public static void main(String[] args) {
-		ApplicationContext context =
-				SpringApplication.run(SpringBootWebApplication.class, args);
-		TransactionMongoTemplate template = context.getBean(TransactionMongoTemplate.class);
-		//System.out.println(template.getTopMerchants(20));
+		SpringApplication.run(SpringBootWebApplication.class, args);
 
 	}
 
@@ -51,4 +46,8 @@ public class SpringBootWebApplication {
 	}
 
 
+	@Override
+	public void run(String... args) throws Exception {
+
 	}
+}

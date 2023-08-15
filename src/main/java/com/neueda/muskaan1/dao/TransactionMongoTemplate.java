@@ -1,7 +1,6 @@
 package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.dto.*;
-import com.neueda.muskaan1.entity.Transactions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -19,6 +19,7 @@ public class TransactionMongoTemplate {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
 
     public List<CategoryAmount> getSpendingHistoryByCategory() {
         GroupOperation groupByCategorySumAmount = group("category").sum("amt").as("total_amt");
@@ -47,19 +48,51 @@ public class TransactionMongoTemplate {
 
     }
 
-    public List<Transactions> getSpendingHistoryByGender(String gender) {
-        Query query =new Query();
-        query.addCriteria(Criteria.where("gender").is(gender));
-        return mongoTemplate.find(query, Transactions.class);
+    public List<GenderAmount> getSpendingHistoryByGender() {
+        GroupOperation groupByGenderSumAmount = group("gender").sum("amt").as("total_amt");
+        MatchOperation allGender = match(new Criteria("gender").exists(true));
+        ProjectionOperation includes = project("total_amt").and("gender").previousOperation();
+        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
+        Aggregation aggregation = newAggregation(allGender, groupByGenderSumAmount, sortByAmountDesc, includes);
+        AggregationResults<GenderAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", GenderAmount.class);
+        List<GenderAmount> result = groupResults.getMappedResults();
+        return result;
+    }
+    public List<CityPopulation> getPopulationForCity() {
+        return mongoTemplate.findAll(CityPopulation.class);
     }
 
-    public List<Transactions> getSpendingHistoryByState(String state) {
-        Query query =new Query();
-        query.addCriteria(Criteria.where("state").is(state));
-        return mongoTemplate.find(query, Transactions.class);
+
+    public CityPopulation getOrderById(long city_population) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("city_population").is(city_population));
+        return mongoTemplate.findOne(query, CityPopulation.class);
+    }
+    public List<Profession> getProfessionForCustomer()
+    {
+        GroupOperation groupByProfessionSumAmount = group("Job").sum("amt").as("total_amt");
+        MatchOperation allProfession = match(new Criteria("Job").exists(true));
+        ProjectionOperation includes = project("total_amt").and("Job").previousOperation();
+        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation = newAggregation(allProfession, groupByProfessionSumAmount, sortByAmountDesc, includes);
+        AggregationResults<Profession> groupResults = mongoTemplate.aggregate(aggregation, "transaction", Profession.class);
+        List<Profession> result = groupResults.getMappedResults();
+        return result;
     }
 
+    public List<StateAmount> getSpendingHistoryByState() {
+        GroupOperation groupByStateSumAmount = group("state").sum("amt").as("total_amt");
+        MatchOperation allState = match(new Criteria("state").exists(true));
+        ProjectionOperation includes = project("total_amt").and("state").previousOperation();
+        SortOperation sortByAmountDesc = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation = newAggregation(allState, groupByStateSumAmount, sortByAmountDesc, includes);
+        AggregationResults<StateAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", StateAmount.class);
+        List<StateAmount> result = groupResults.getMappedResults();
+        return result;
+    }
 
     public List<AmountSpending> getSpendingHistoryByAmount() {
         // Group transactions based on amount and categorize as lowValue and highValue
@@ -79,7 +112,7 @@ public class TransactionMongoTemplate {
         SortOperation sortBySpendingType = sort(Sort.by(Sort.Direction.ASC, "spendingType"));
 
         // Aggregation pipeline
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation aggregation = newAggregation(
                 groupBySpendingTypeSumAmount,
                 projectSpendingTypeAndCount,
                 groupBySpendingTypeSumTotalAmount,
@@ -101,7 +134,7 @@ public class TransactionMongoTemplate {
         SortOperation sortByTotalSpendingDesc = sort(Sort.by(Sort.Direction.DESC, "totalSpending"));
         LimitOperation limitResults = limit(limit);
 
-        Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation aggregation = newAggregation(
                 groupByMerchantSumAmount,
                 sortByTotalSpendingDesc,
                 limitResults
@@ -110,8 +143,6 @@ public class TransactionMongoTemplate {
         AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction", TopMerchant.class);
         return groupResults.getMappedResults();
     }
-
-
 
 
 

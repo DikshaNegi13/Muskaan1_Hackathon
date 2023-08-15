@@ -1,14 +1,15 @@
 package com.neueda.muskaan1.service;
 
 import com.neueda.muskaan1.dao.TransactionMongoTemplate;
-import com.neueda.muskaan1.dto.CategoryAmount;
-import com.neueda.muskaan1.dto.MerchantAmount;
+import com.neueda.muskaan1.dto.*;
 import com.neueda.muskaan1.entity.Transactions;
 import com.neueda.muskaan1.dao.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 @Service
 public class TransactionService {
@@ -23,21 +24,36 @@ public class TransactionService {
     public List<CategoryAmount> getSpendingHistoryByCategory() {
         return dao.getSpendingHistoryByCategory();
     }
-    public List<Transactions> getSpendingHistoryByGender(String gender) {
-        return dao.getSpendingHistoryByGender(gender);
-    }
-    public List<Transactions> getSpendingHistoryByState(String state) {
-        System.out.println(state + " Printing from service class");
-        return dao.getSpendingHistoryByState(state);
 
+    public List<GenderAmount> getSpendingHistoryByGender() {
+        return dao.getSpendingHistoryByGender();
     }
-
+    public List<Profession> getProfessionForCustomer()
+    {
+        return dao.getProfessionForCustomer();
+    }
+    public List<CityPopulation> getPopulationForCity()
+    {
+        return dao.getPopulationForCity();
+    }
+public List<StateAmount> getSpendingHistoryByState()
+    {
+        return dao.getSpendingHistoryByState();
+    }
     public List<Transactions> getSpendingHistoryByCity(String city) {
         System.out.println(city + " Printing from service class");
         List<Transactions> customerList = transactionRepo.findByCity(city);
         return customerList;
     }
-
-
+    public List<Transactions> getProfessionForCustomer(String Job) {
+        System.out.println(Job + " Printing from service class");
+        List<Transactions> customerList = transactionRepo.findByJob(Job);
+        return customerList;
+    }
+    public List<Transactions> getPopulationForCity(long city_population) {
+        System.out.println(city_population + " Printing from service class");
+        List<Transactions> customerList = transactionRepo.findByPopulation(city_population);
+        return customerList;
+    }
 
 }
