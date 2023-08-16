@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -96,12 +97,22 @@ public class TransactionMongoTemplate {
         return result;
     }
 
-    public List<Transactions> getSpendingHistoryByAmount(double lowValue, double highValue) {
+    public List<AmountSpending> getSpendingHistoryByAmount(double lowValue, double highValue) {
         Criteria amountCriteria = Criteria.where("amt").gte(lowValue).lte(highValue);
         Query query = new Query(amountCriteria).with(Sort.by(Sort.Direction.DESC, "amt"));
 
+        List<AmountSpending> amountSpendingList = new ArrayList<>();
+
         List<Transactions> transactions = mongoTemplate.find(query, Transactions.class);
-        return transactions;
+
+        for (Transactions transaction : transactions) {
+            AmountSpending amountSpending = new AmountSpending();
+            amountSpending.setCustomerId(transaction.getCustomerId());
+            amountSpending.setAmt(transaction.getAmt());
+            amountSpendingList.add(amountSpending);
+        }
+
+        return amountSpendingList;
     }
 
 
