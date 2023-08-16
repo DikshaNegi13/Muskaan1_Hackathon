@@ -95,7 +95,7 @@ public class TransactionMongoTemplate {
     }
 
     public List<AmountSpending> getSpendingHistoryByAmount() {
-        GroupOperation groupBySpendingTypeSumAmount = Aggregation.group()
+        GroupOperation groupBySpendingTypeSumAmount = Aggregation.group("spendingType")
                 .sum(ConditionalOperators.when(Criteria.where("amt").lte(100)).then(1).otherwise(0)).as("lowValue")
                 .sum(ConditionalOperators.when(Criteria.where("amt").gt(100)).then(1).otherwise(0)).as("highValue");
 
@@ -118,7 +118,8 @@ public class TransactionMongoTemplate {
         );
 
         AggregationResults<AmountSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", AmountSpending.class);
-        return groupResults.getMappedResults();
+        List<AmountSpending> result=groupResults.getMappedResults();
+        return result;
     }
 
 
@@ -130,7 +131,19 @@ public class TransactionMongoTemplate {
     // The returned data is structured using the TopMerchant DTO.
 
     public List<TopMerchant> getTopMerchants(int limit) {
-        Aggregation aggregation = Aggregation.newAggregation(
+        GroupOperation groupByTopMerchantSumAmount = group("merchant").sum("amt").as("total_amt").first("city").as("city")
+                .first("state").as("state")
+                .first("city_population").as("cityPopulation");
+        MatchOperation allMerchant = match(new Criteria("merchant").exists(true));
+        ProjectionOperation includes = project("total_amt").andInclude("city").andInclude("state").andInclude("cityPopulation").and("merchant").previousOperation();
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation = newAggregation(allMerchant, groupByTopMerchantSumAmount, sortByAmtDESC, includes);
+        AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction",TopMerchant.class);
+        List<TopMerchant> result = groupResults.getMappedResults();
+        return result;
+    }
+     /*   Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("merchant")
                         .sum("amt").as("totalSpending")
                         .first("city").as("city")
@@ -150,6 +163,6 @@ public class TransactionMongoTemplate {
         List<TopMerchant> result = groupResults.getMappedResults();
         return result;
     }
-
+*/
 
 }

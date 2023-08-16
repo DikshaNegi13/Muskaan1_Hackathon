@@ -2,7 +2,7 @@ package com.neueda.muskaan1.dto;
 
 public class TopMerchant {
     private String merchant;
-    private double totalSpending;
+    private double total_amt;
     private String city;
     private String state;
     private int cityPopulation;
@@ -15,12 +15,12 @@ public class TopMerchant {
         this.merchant = merchant;
     }
 
-    public double getTotalSpending() {
-        return totalSpending;
+    public double getTotal_amt() {
+        return total_amt;
     }
 
-    public void setTotalSpending(double totalSpending) {
-        this.totalSpending = totalSpending;
+    public void setTotal_amt(double total_amt) {
+        this.total_amt = total_amt;
     }
 
     public String getCity() {
@@ -47,9 +47,9 @@ public class TopMerchant {
         this.cityPopulation = cityPopulation;
     }
 
-    public TopMerchant(String merchant, double totalSpending, String city, String state, int cityPopulation) {
+    public TopMerchant(String merchant, double total_amt, String city, String state, int cityPopulation) {
         this.merchant = merchant;
-        this.totalSpending = totalSpending;
+        this.total_amt = total_amt;
         this.city = city;
         this.state = state;
         this.cityPopulation = cityPopulation;
