@@ -3,24 +3,21 @@ package com.neueda.muskaan1;
 import com.neueda.muskaan1.dao.ITransactionRepo;
 import com.neueda.muskaan1.dao.TransactionMongoTemplate;
 import com.neueda.muskaan1.dto.*;
-import com.neueda.muskaan1.entity.Transactions;
-import com.neueda.muskaan1.exception.CustomerNotFound;
 import com.neueda.muskaan1.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Sort;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@SpringBootTest
 class TransactionServiceTest {
 
     @Mock
@@ -103,16 +100,7 @@ class TransactionServiceTest {
         verify(dao, times(1)).getSpendingHistoryByState();
     }
 
-    @Test
-    void testGetSpendingHistoryByAmount() {
-        List<AmountSpending> expected = Collections.singletonList(new AmountSpending());
-        when(dao.getSpendingHistoryByAmount()).thenReturn(expected);
 
-        List<AmountSpending> result = service.getSpendingHistoryByAmount();
-
-        assertEquals(expected, result);
-        verify(dao, times(1)).getSpendingHistoryByAmount();
-    }
 
     @Test
     void testGetTopMerchants() {

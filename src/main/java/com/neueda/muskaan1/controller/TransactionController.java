@@ -49,9 +49,9 @@ public class TransactionController {
         return transactionService.getSpendingHistoryByGender();
     }
 
-    @GetMapping("/spendingByAmount")
-    public List<AmountSpending> getSpendingByAmount() {
-        return transactionService.getSpendingHistoryByAmount();
+    @GetMapping("/spendingByAmount/{low}/{high}")
+    public List<AmountSpending> getSpendingByAmount(@PathVariable double low ,@PathVariable double high ) {
+        return transactionService.getSpendingHistoryByAmount(low,high);
     }
 
     @GetMapping("/topMerchants")

@@ -50,8 +50,8 @@ public class TransactionService {
     }
 
 
-    public List<AmountSpending> getSpendingHistoryByAmount() {
-        return dao.getSpendingHistoryByAmount();
+    public List<AmountSpending> getSpendingHistoryByAmount(double low,double high) {
+        return dao.getSpendingHistoryByAmount(low,high);
     }
 
     public List<TopMerchant> getTopMerchants(int limit) {

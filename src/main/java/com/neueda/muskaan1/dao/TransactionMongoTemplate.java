@@ -94,26 +94,27 @@ public class TransactionMongoTemplate {
         return result;
     }
 
-    public List<AmountSpending> getSpendingHistoryByAmount() {
-        GroupOperation groupBySpendingTypeSumAmount = Aggregation.group("spendingType")
-                .sum(ConditionalOperators.when(Criteria.where("amt").lte(100)).then(1).otherwise(0)).as("lowValue")
-                .sum(ConditionalOperators.when(Criteria.where("amt").gt(100)).then(1).otherwise(0)).as("highValue");
+    public List<AmountSpending> getSpendingHistoryByAmount(double low, double high) {
 
-        ProjectionOperation projectSpendingTypeAndCount = Aggregation.project("amt", "lowValue", "highValue")
-                .andExpression("lowValue + highValue").as("totalSpending")
-                .and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
+        GroupOperation groupBySpendingTypeSumAmount = Aggregation.group("customerId").sum("amt").as("total_amt");
+        MatchOperation allAmountSpending = match(new Criteria("amt").gte(low).andOperator(Criteria.where("amt").lte(high)));
+        /*           .sum(ConditionalOperators.when(Criteria.where("amt").gt(100)).then(1).otherwise(0)).as("highValue");
+*/
+        ProjectionOperation projectSpendingTypeAndCount = Aggregation.project("amt", "customerId");
+                //.andExpression("lowValue + highValue").as("totalSpending")
+                //.and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
 
-        GroupOperation groupBySpendingTypeSumTotalAmount = Aggregation.group("spendingType")
+       /* GroupOperation groupBySpendingTypeSumTotalAmount = Aggregation.group("spendingType")
                 .sum("totalSpending").as("totalSpending")
                 .sum(ConditionalOperators.when(Criteria.where("spendingType").is("Low")).thenValueOf("lowValue").otherwise(0)).as("lowValue")
                 .sum(ConditionalOperators.when(Criteria.where("spendingType").is("High")).thenValueOf("highValue").otherwise(0)).as("highValue");
-
-        SortOperation sortBySpendingType = Aggregation.sort(Sort.Direction.ASC, "spendingType");
+*/
+        SortOperation sortBySpendingType = Aggregation.sort(Sort.Direction.DESC, "customerId");
 
         Aggregation aggregation = Aggregation.newAggregation(
                 groupBySpendingTypeSumAmount,
+                allAmountSpending,
                 projectSpendingTypeAndCount,
-                groupBySpendingTypeSumTotalAmount,
                 sortBySpendingType
         );
 
