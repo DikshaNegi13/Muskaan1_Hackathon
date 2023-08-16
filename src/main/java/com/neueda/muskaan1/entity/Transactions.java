@@ -13,7 +13,7 @@ public class Transactions {
     @Id
     private ObjectId id;
     @Field("customer_id")
-    public String customerId;
+    public int customerId;
 
     @Field("trans_date_trans_time")
     public String transDateTransTime;
@@ -73,11 +73,11 @@ public class Transactions {
         this.transactionNum = transactionNum;
     }
 
-    public String getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customer_id) {
+    public void setCustomerId(int customer_id) {
         this.customerId = customerId;
     }
 
@@ -161,7 +161,7 @@ public class Transactions {
         this.dob = dob;
     }
 
-    public Transactions(String transDateTransTime, double amt, int transactionNum, String customerId, String city, String state, int cityPopulation, String merchant, String category, String first, String last, String gender, String job, String dob) {
+    public Transactions(String transDateTransTime, double amt, int transactionNum, int customerId, String city, String state, int cityPopulation, String merchant, String category, String first, String last, String gender, String job, String dob) {
 
         this.transDateTransTime = transDateTransTime;
         this.amt = amt;
