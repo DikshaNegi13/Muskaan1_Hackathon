@@ -1,4 +1,5 @@
 package com.neueda.muskaan1.entity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.bson.types.ObjectId;
@@ -28,25 +29,30 @@ public class Customer {
     @Field("customer_id")
     private int customerId;
     @NotBlank(message = "Enter First Name")
-    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message = "Invalid first name")
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
     @Field("first")
-    private String firstName;
+    @Schema(example = "Andy")
+    private String firstName; 
 
     @NotBlank(message = "Enter Last Name")
-    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message = "Invalid last name")
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid last name")
     @Field("last")
+    @Schema(example = "Paul")
     private String lastName;
 
     @NotBlank(message = "Enter Gender")
     @Pattern(regexp = "^(Male|Female)$", message = "Gender must be 'Male' or 'Female'")
+    @Schema(example = "Male")
     private String gender;
 
     @NotBlank(message = "Enter Job")
-    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message   = "Invalid job status")
-    private String job ;
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message   = "Invalid job status")
+    @Schema(example = "Lawyer")
+    private String job;
 
     @NotBlank(message = "Date of birth is required")
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")
+    @Schema(example = "1997-05-02")
 //    @Past(message = "Date of birth should be in the past")
     private String dob;
 

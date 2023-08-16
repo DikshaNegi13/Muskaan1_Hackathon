@@ -1,62 +1,37 @@
-# Spring Boot MongoDB Integration for a Credit Card Management System
+# CITI PBWM Analyst Program - Credit Card Management Application
 
-This is the first project task demonstrating how to integrate Spring Boot with MongoDB for building RESTful APIs as per the problem statement.
+Welcome to the CITI PBWM Analyst Program Credit Card Management Application repository made by team Muskaan1! This project showcases a comprehensive credit card management system developed as part of the CITI Private Banking and Wealth Management Analyst Program.
 
-## Prerequisites
+## Overview
+The Credit Card Management Application is a full-stack solution designed to provide operations analysts with the ability to view and manage credit card data, perform filtering based on various categories, and demonstrate well-structured REST API practices. The backend is built using Spring Boot, MongoDB, and follows industry-standard design principles.
 
-Before you begin, ensure you have met the following requirements:
-
-- Java 8 or higher installed
-- Maven installed (depending on your preference)
+## Features
+- View spending history based on gender, spending category, merchant, location, and more.
+- Perform CRUD operations on credit card data through a well-designed RESTful API.
+- Seamlessly interact with the MongoDB database for data storage and retrieval.
 
 ## Getting Started
+To run the backend of the application locally:
 
-1. Clone this repository:
+1. Clone this repository to your machine.
+2. Configure the MongoDB connection details in `src/main/resources/application.properties`.
+3. Build and run the Spring Boot application using your preferred IDE or command-line tools.
 
-    ```bash
-    git clone https://github.com/DikshaNegi13/Muskaan1_Hackathon.git
-    ```
+For detailed API documentation and available endpoints, refer to the [API Documentation](API_DOCUMENTATION.md).
 
-2. Navigate to the project directory:
+## Data Population
+To populate the database with sample credit card user data:
 
-    ```bash
-    cd your-spring-boot-mongodb-project
-    ```
+1. Follow the steps in the [Data Population Guide](DATA_POPULATION.md).
 
-3. Build the project:
-
-    For Maven:
-    ```bash
-    mvn clean install
-    ```
-
-4. Run the application:
-
-    For Maven:
-    ```bash
-    mvn spring-boot:run
-    ```
-
-5. Access the API:
-
-    The API should be available at `http://localhost:8080/api/users`.
-
-## Endpoints
-
-- `GET /api/users`: Get a list of all users.
-- `GET /api/users/{id}`: Get user details by ID.
-- `POST /api/users`: Create a new user.
-- `PUT /api/users/{id}`: Update an existing user by ID.
-- `DELETE /api/users/{id}`: Delete a user by ID.
-
-## Configuration
-
-- MongoDB connection details can be configured in `src/main/resources/application.properties`.
+## Demonstration
+Watch the [Demonstration Video](https://example.com/demo) to see the application in action.
 
 ## Contributing
-
-Contributions are welcome! Please create a pull request if you'd like to contribute to this project.
+Contributions are welcome! To contribute to the project, follow the guidelines outlined in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
+This project is licensed under the [MIT License](LICENSE).
 
-This project is not licensed.
+## Disclaimer
+This project is a simulation and does not represent actual applications or requirements of CITI. It was created for educational purposes as part of the CITI PBWM Analyst Program.
