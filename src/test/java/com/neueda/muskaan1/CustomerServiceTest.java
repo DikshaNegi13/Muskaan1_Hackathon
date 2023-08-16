@@ -5,8 +5,7 @@ import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
 import com.neueda.muskaan1.exception.CustomerNotFound;
 import com.neueda.muskaan1.service.CustomerService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -163,6 +162,6 @@ class CustomerServiceTest {
         verify(repo, times(1)).findByCustomerId(1002);
     }
 
-    // Add more test methods for other service methods similarly
+
 
 }
