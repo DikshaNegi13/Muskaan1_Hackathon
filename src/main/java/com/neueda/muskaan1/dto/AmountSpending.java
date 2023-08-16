@@ -5,7 +5,6 @@ public class AmountSpending {
 
     private double amt;
 
-
     public int getCustomerId() {
         return customerId;
     }
