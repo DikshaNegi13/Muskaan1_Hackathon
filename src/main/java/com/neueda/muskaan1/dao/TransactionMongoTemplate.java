@@ -143,26 +143,5 @@ public class TransactionMongoTemplate {
         List<TopMerchant> result = groupResults.getMappedResults();
         return result;
     }
-     /*   Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.group("merchant")
-                        .sum("amt").as("totalSpending")
-                        .first("city").as("city")
-                        .first("state").as("state")
-                        .first("city_population").as("cityPopulation"),
-                Aggregation.sort(Sort.Direction.DESC, "totalSpending"),
-                Aggregation.limit(limit)
-        );
-
-
-        // Execute the aggregation pipeline
-        AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(
-                aggregation, "transaction", TopMerchant.class
-        );
-
-        // Get the aggregated results
-        List<TopMerchant> result = groupResults.getMappedResults();
-        return result;
-    }
-*/
 
 }
