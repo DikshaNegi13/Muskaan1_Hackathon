@@ -14,29 +14,30 @@ import java.util.List;
 
 public class TransactionController {
     @Autowired
-   private  TransactionService transactionService;
-    @RequestMapping(value="/merchant", method =RequestMethod.GET)
+    private TransactionService transactionService;
+
+    @RequestMapping(value = "/merchant", method = RequestMethod.GET)
     public List<MerchantAmount> getAmountForMerchant() {
         return transactionService.getMerchantAmount();
     }
-    @RequestMapping(value="/city", method =RequestMethod.GET)
+
+    @RequestMapping(value = "/city", method = RequestMethod.GET)
     public List<CityAmount> getAmountForCity() {
         return transactionService.getSpendingHistoryByCity();
     }
-    @RequestMapping(value = "/Job",method = RequestMethod.GET)
-    public List<JobAmount> getAmountByJob()
-    {
+
+    @RequestMapping(value = "/Job", method = RequestMethod.GET)
+    public List<JobAmount> getAmountByJob() {
         return transactionService.getSpendingHistoryByJob();
     }
-    @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public List<CategoryAmount> getCustomerByCategory()
-    {
+
+    @RequestMapping(value = "/category", method = RequestMethod.GET)
+    public List<CategoryAmount> getCustomerByCategory() {
         return transactionService.getSpendingHistoryByCategory();
     }
-    @GetMapping("/city_population")
-    public <city_population> List<Transactions> getPopulationByCity(String city)
-    {
 
+    @GetMapping("/city_population")
+    public <city_population> List<Transactions> getPopulationByCity(String city) {
         return transactionService.getPopulationByCity(city);
     }
 
@@ -44,14 +45,15 @@ public class TransactionController {
     public List<StateAmount> getCustomerByState() {
         return transactionService.getSpendingHistoryByState();
     }
+
     @GetMapping("/total_amt/{gender}")
     public List<GenderAmount> getCustomerByGender() {
         return transactionService.getSpendingHistoryByGender();
     }
 
     @GetMapping("/spendingByAmount/{low}/{high}")
-    public List<AmountSpending> getSpendingByAmount(@PathVariable double low ,@PathVariable double high ) {
-        return transactionService.getSpendingHistoryByAmount(low,high);
+    public List<AmountSpending> getSpendingByAmount(@PathVariable double low, @PathVariable double high) {
+        return transactionService.getSpendingHistoryByAmount(low, high);
     }
     @GetMapping("/topMerchants")
     public List<TopMerchant> getTopMerchants(@RequestParam int limit) {

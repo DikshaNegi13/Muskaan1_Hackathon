@@ -18,35 +18,27 @@ public class Transactions {
     @Field("trans_date_trans_time")
     public String transDateTransTime;
 
-    //@NotBlank(message = "Amount is required")
-    @Pattern(regexp = "\\(?\\d+\\.\\d+\\)?", message = "Invalid Amount entered")
     public double amt;
     @Field("trans_num")
     @NotBlank(message = "Transaction number is required")
-    @Pattern(regexp = "^0*?[1-9]\\d*$", message = "Invalid Transaction number entered")
     public int transactionNum;
 
     @NotBlank(message = "Enter city")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "Invalid city name")
     public String city;
     @NotBlank(message = "Enter state")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "Invalid state name")
     public String state;
     @Field("city_population")
     public int cityPopulation;
     public String merchant;
     @NotBlank(message = "Enter category")
-    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message = "Invalid category name")
     public String category;
     public String first;
     public String last;
     public String dob;
     @NotBlank(message = "Enter Gender")
-    @Pattern(regexp = "^(Male|Female)$", message = "Gender must be 'Male' or 'Female'")
     public String gender;
     @Field("Job")
     @NotBlank(message = "Enter Job")
-    @Pattern(regexp ="^[a-zA-Z\s.'-]*$", message   = "Invalid job status")
     public String job;
 
     public String getTransDateTransTime() {
