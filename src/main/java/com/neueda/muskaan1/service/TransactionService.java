@@ -21,9 +21,11 @@ public class TransactionService {
     public List<MerchantAmount> getMerchantAmount() {
         return dao.getAmountForMerchant();
     }
+
     public List<CategoryAmount> getSpendingHistoryByCategory() {
         return dao.getSpendingHistoryByCategory();
     }
+
     public List<JobAmount> getSpendingHistoryByJob() {
         return dao.getSpendingHistoryByJob();
     }
@@ -32,18 +34,28 @@ public class TransactionService {
     public List<GenderAmount> getSpendingHistoryByGender() {
         return dao.getSpendingHistoryByGender();
     }
+
     public List<CityAmount> getSpendingHistoryByCity() {
         return dao.getSpendingHistoryByCity();
     }
 
-public List<StateAmount> getSpendingHistoryByState()
-    {
+    public List<StateAmount> getSpendingHistoryByState() {
         return dao.getSpendingHistoryByState();
     }
+
     public List<Transactions> getPopulationByCity(String city) {
         System.out.println(city + " Printing from service class");
         List<Transactions> customerList = transactionRepo.findByCity(city);
         return customerList;
+    }
+
+
+    public List<AmountSpending> getSpendingHistoryByAmount() {
+        return dao.getSpendingHistoryByAmount();
+    }
+
+    public List<TopMerchant> getTopMerchants(int limit) {
+        return dao.getTopMerchants(limit);
     }
 
 }

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 
 
-@Document
+@Document("customer")
 public class Customer {
     public Customer(ObjectId id) {
         this.id = id;
