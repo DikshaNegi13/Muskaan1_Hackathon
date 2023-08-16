@@ -1,5 +1,7 @@
 package com.neueda.muskaan1.entity;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,10 +10,44 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("transaction")
 
 public class Transactions {
- @Id
- private ObjectId id;
- @Field("customer_id")
- public String customerId;
+    @Id
+    private ObjectId id;
+    @Field("customer_id")
+    public String customerId;
+
+    @Field("trans_date_trans_time")
+    public String transDateTransTime;
+
+    //@NotBlank(message = "Amount is required")
+    @Pattern(regexp = "\\(?\\d+\\.\\d+\\)?", message = "Invalid Amount entered")
+    public double amt;
+    @Field("trans_num")
+    @NotBlank(message = "Transaction number is required")
+    @Pattern(regexp = "^0*?[1-9]\\d*$", message = "Invalid Transaction number entered")
+    public int transactionNum;
+
+    @NotBlank(message = "Enter city")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "Invalid city name")
+    public String city;
+    @NotBlank(message = "Enter state")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "Invalid state name")
+    public String state;
+    @Field("city_population")
+    public int cityPopulation;
+    public String merchant;
+    @NotBlank(message = "Enter category")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "Invalid category name")
+    public String category;
+    public String first;
+    public String last;
+    public String dob;
+    @NotBlank(message = "Enter Gender")
+    @Pattern(regexp = "^(Male|Female)$", message = "Gender must be 'Male' or 'Female'")
+    public String gender;
+    @Field("Job")
+    @NotBlank(message = "Enter Job")
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message   = "Invalid job status")
+    public String job;
 
     public String getTransDateTransTime() {
         return transDateTransTime;
@@ -124,20 +160,6 @@ public class Transactions {
     public void setDob(String dob) {
         this.dob = dob;
     }
- @Field("trans_date_trans_time")
-    public String transDateTransTime;
-        public double amt;
-        @Field("trans_num")
-        public int transactionNum;
-
-        public String city;
-        public String state;
-        @Field("city_population")
-        public int cityPopulation;
-        public String merchant;
-        public String category;
-        public String first;
-        public String last;
 
     public Transactions(String transDateTransTime, double amt, int transactionNum, String customerId, String city, String state, int cityPopulation, String merchant, String category, String first, String last, String gender, String job, String dob) {
 
@@ -156,10 +178,6 @@ public class Transactions {
         this.job = job;
         this.dob = dob;
     }
-
-    public String gender;
-        @Field("Job")
-        public String job;
 
     @Override
     public String toString() {
@@ -180,7 +198,6 @@ public class Transactions {
                 ", dob='" + dob + '\'' +
                 '}';
     }
-    public String dob;
     }
 
 
