@@ -1,32 +1,26 @@
 package com.neueda.muskaan1;
 
+import com.neueda.muskaan1.dao.ICustomerRepository;
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.exception.CustomerAlreadyExists;
 import com.neueda.muskaan1.exception.CustomerNotFound;
-import com.neueda.muskaan1.dao.ICustomerRepository;
 import com.neueda.muskaan1.service.CustomerService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+class CustomerServiceTest {
 
-import static org.mockito.Mockito.when;
-
-public class CustomerServiceTest {
     @Mock
     private ICustomerRepository repo;
+
     @InjectMocks
     private CustomerService service;
 
@@ -36,37 +30,37 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void testAddCustomer_Success() throws CustomerAlreadyExists {
+    void testAddCustomer_Success() throws CustomerAlreadyExists {
         Customer customer = new Customer();
         customer.setCustomerId(1001);
         customer.setFirstName("John");
         customer.setLastName("Cole");
 
-        when(repo.existsById(1001)).thenReturn(false);
+        when(repo.existsByCustomerId(1001)).thenReturn(false);
         when(repo.save(any(Customer.class))).thenReturn(customer);
 
         Customer result = service.addCustomer(customer);
 
-        assertEquals("1002", result.getCustomerId());
+        assertEquals(1001, result.getCustomerId());
         assertEquals("John", result.getFirstName());
         assertEquals("Cole", result.getLastName());
 
-        verify(repo, times(1)).existsById("1002");
+        verify(repo, times(1)).existsByCustomerId(1001);
         verify(repo, times(1)).save(any(Customer.class));
     }
 
     @Test
     void testAddCustomer_CustomerAlreadyExists() {
         Customer customer = new Customer();
-        customer.setCustomerId("1002");
+        customer.setCustomerId(1002);
         customer.setFirstName("John");
         customer.setLastName("Cole");
 
-        when(repo.existsById("1002")).thenReturn(true);
+        when(repo.existsByCustomerId(1002)).thenReturn(true);
 
         assertThrows(CustomerAlreadyExists.class, () -> service.addCustomer(customer));
 
-        verify(repo, times(1)).existsById("1002");
+        verify(repo, times(1)).existsByCustomerId(1002);
         verify(repo, never()).save(any(Customer.class));
     }
 
@@ -74,96 +68,100 @@ public class CustomerServiceTest {
     void testGetAllCustomer() {
         List<Customer> customerList = Collections.singletonList(new Customer());
         when(repo.findAll()).thenReturn(customerList);
+
         List<Customer> result = service.getAllCustomer();
+
         assertEquals(customerList, result);
         verify(repo, times(1)).findAll();
     }
 
     @Test
     void testUpdateCustomer_Success() {
-        Customer customer = new Customer();
-        customer.setCustomerId("1002");
-        customer.setFirstName("John");
-        customer.setLastName("Cole");
+        Customer existingCustomer = new Customer();
+        existingCustomer.setCustomerId(1002);
+        existingCustomer.setFirstName("John");
+        existingCustomer.setLastName("Doe");
 
-        when(repo.existsById("1002")).thenReturn(true);
-        when(repo.save(any(Customer.class))).thenReturn(customer);
+        Customer updatedCustomer = new Customer();
+        updatedCustomer.setFirstName("Jane");
+        updatedCustomer.setLastName("Smith");
 
-        Customer result = service.updateCustomer("1002", customer);
+        when(repo.findByCustomerId(1002)).thenReturn(existingCustomer);
+        when(repo.save(any(Customer.class))).thenReturn(updatedCustomer);
 
-        assertEquals("1002", result.getCustomerId());
-        assertEquals("John", result.getFirstName());
-        assertEquals("Cole", result.getLastName());
+        Customer result = service.updateCustomer(1002, updatedCustomer);
 
-        verify(repo, times(1)).existsById("1002");
+        assertEquals("Jane", result.getFirstName());
+        assertEquals("Smith", result.getLastName());
+        assertEquals(1002, result.getCustomerId());
+
+        verify(repo, times(1)).findByCustomerId(1002);
         verify(repo, times(1)).save(any(Customer.class));
     }
 
     @Test
     void testUpdateCustomer_CustomerNotFound() {
-        Customer customer = new Customer();
-        customer.setCustomerId("1002");
-        customer.setFirstName("John");
-        customer.setLastName("Cole");
+        when(repo.findByCustomerId(1002)).thenReturn(null);
 
-        when(repo.existsById("1002")).thenReturn(false);
+        assertThrows(CustomerNotFound.class, () -> service.updateCustomer(1002, new Customer()));
 
-        assertThrows(CustomerNotFound.class, () -> service.updateCustomer("1002", customer));
-
-        verify(repo, times(1)).existsById("1002");
+        verify(repo, times(1)).findByCustomerId(1002);
         verify(repo, never()).save(any(Customer.class));
     }
 
     @Test
     void testDeleteCustomer_Success() {
-        Customer customer = new Customer();
-        customer.setCustomerId("1002");
-        customer.setFirstName("John");
-        customer.setLastName("Cole");
+        Customer existingCustomer = new Customer();
+        existingCustomer.setCustomerId(1002);
+        existingCustomer.setFirstName("John");
+        existingCustomer.setLastName("Doe");
 
-        when(repo.findById("1002")).thenReturn(Optional.of(customer));
+        when(repo.findByCustomerId(1002)).thenReturn(existingCustomer);
 
-        service.deleteCustomer("1002");
+        service.deleteCustomer(1002);
 
-        verify(repo, times(1)).findById("1002");
-        verify(repo, times(1)).delete(customer);
+        verify(repo, times(1)).findByCustomerId(1002);
+        verify(repo, times(1)).delete(existingCustomer);
     }
 
     @Test
     void testDeleteCustomer_CustomerNotFound() {
-        when(repo.findById("1002")).thenReturn(Optional.empty());
+        when(repo.findByCustomerId(1002)).thenReturn(null);
 
-        assertThrows(CustomerNotFound.class, () -> service.deleteCustomer("1002"));
+        assertThrows(CustomerNotFound.class, () -> service.deleteCustomer(1002));
 
-        verify(repo, times(1)).findById("1002");
+        verify(repo, times(1)).findByCustomerId(1002);
         verify(repo, never()).delete(any(Customer.class));
     }
 
     @Test
-    void testGetCustomerById_Success() throws CustomerNotFound {
+    void testGetCustomerById_Success() {
         Customer customer = new Customer();
-        customer.setCustomerId("1002");
+        customer.setCustomerId(1002);
         customer.setFirstName("John");
-        customer.setLastName("Cole");
+        customer.setLastName("Doe");
 
-        when(repo.findById("1002")).thenReturn(Optional.of(customer));
+        when(repo.findByCustomerId(1002)).thenReturn(customer);
 
-        Optional<Customer> result = service.getCustomerById("1002");
+        Customer result = service.getCustomerById(1002);
 
-        assertTrue(result.isPresent());
-        assertEquals(customer, result.get());
+        assertNotNull(result);
+        assertEquals("John", result.getFirstName());
+        assertEquals("Doe", result.getLastName());
+        assertEquals(1002, result.getCustomerId());
 
-        verify(repo, times(1)).findById("1002");
+        verify(repo, times(1)).findByCustomerId(1002);
     }
 
     @Test
     void testGetCustomerById_CustomerNotFound() {
-        when(repo.findById("1002")).thenReturn(Optional.empty());
+        when(repo.findByCustomerId(1002)).thenReturn(null);
 
-        assertThrows(CustomerNotFound.class, () -> service.getCustomerById("1002"));
+        assertThrows(CustomerNotFound.class, () -> service.getCustomerById(1002));
 
-        verify(repo, times(1)).findById("1002");
+        verify(repo, times(1)).findByCustomerId(1002);
     }
+
 
 
 }

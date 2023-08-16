@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ICustomerRepository extends MongoRepository<Customer, ObjectId> {
 
-      boolean existsById(int customerId);
+      boolean existsByCustomerId(int customerId);
 
 //   Optional<Customer> findByCustomerId(String customerId);
 
