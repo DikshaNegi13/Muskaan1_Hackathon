@@ -53,7 +53,6 @@ public class TransactionController {
     public List<Transactions> getSpendingByAmount(@PathVariable double low ,@PathVariable double high ) {
         return transactionService.getSpendingHistoryByAmount(low,high);
     }
-
     @GetMapping("/topMerchants")
     public List<TopMerchant> getTopMerchants(@RequestParam int limit) {
         return transactionService.getTopMerchants(limit);

@@ -36,7 +36,7 @@ public class Transactions {
     public int cityPopulation;
     public String merchant;
     @NotBlank(message = "Enter category")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "Invalid category name")
+    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message = "Invalid category name")
     public String category;
     public String first;
     public String last;
@@ -46,7 +46,7 @@ public class Transactions {
     public String gender;
     @Field("Job")
     @NotBlank(message = "Enter Job")
-    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message   = "Invalid job status")
+    @Pattern(regexp ="^[a-zA-Z\s.'-]*$", message   = "Invalid job status")
     public String job;
 
     public String getTransDateTransTime() {

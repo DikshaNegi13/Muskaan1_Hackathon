@@ -1,11 +1,13 @@
 package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.dto.*;
+import com.neueda.muskaan1.entity.Transactions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -94,21 +96,21 @@ public class TransactionMongoTemplate {
         return result;
     }
 
-    public List<AmountSpending> getSpendingHistoryByAmount(double low, double high) {
+ /*   public List<AmountSpending> getSpendingHistoryByAmount(double low, double high) {
 
         GroupOperation groupBySpendingTypeSumAmount = Aggregation.group("customerId").sum("amt").as("total_amt");
         MatchOperation allAmountSpending = match(new Criteria("amt").gte(low).andOperator(Criteria.where("amt").lte(high)));
-        /*           .sum(ConditionalOperators.when(Criteria.where("amt").gt(100)).then(1).otherwise(0)).as("highValue");
-*/
+        *//*           .sum(ConditionalOperators.when(Criteria.where("amt").gt(100)).then(1).otherwise(0)).as("highValue");
+*//*
         ProjectionOperation projectSpendingTypeAndCount = Aggregation.project("amt", "customerId");
                 //.andExpression("lowValue + highValue").as("totalSpending")
                 //.and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
 
-       /* GroupOperation groupBySpendingTypeSumTotalAmount = Aggregation.group("spendingType")
+       *//* GroupOperation groupBySpendingTypeSumTotalAmount = Aggregation.group("spendingType")
                 .sum("totalSpending").as("totalSpending")
                 .sum(ConditionalOperators.when(Criteria.where("spendingType").is("Low")).thenValueOf("lowValue").otherwise(0)).as("lowValue")
                 .sum(ConditionalOperators.when(Criteria.where("spendingType").is("High")).thenValueOf("highValue").otherwise(0)).as("highValue");
-*/
+*//*
         SortOperation sortBySpendingType = Aggregation.sort(Sort.Direction.DESC, "customerId");
 
         Aggregation aggregation = Aggregation.newAggregation(
@@ -121,8 +123,14 @@ public class TransactionMongoTemplate {
         AggregationResults<AmountSpending> groupResults = mongoTemplate.aggregate(aggregation, "transaction", AmountSpending.class);
         List<AmountSpending> result=groupResults.getMappedResults();
         return result;
-    }
+    }*/
+    public List<Transactions> getSpendingHistoryByAmount(double lowValue, double highValue) {
+        Criteria amountCriteria = Criteria.where("amt").gte(lowValue).lte(highValue);
+        Query query = new Query(amountCriteria).with(Sort.by(Sort.Direction.DESC, "customerId"));
 
+        List<Transactions> transactions = mongoTemplate.find(query, Transactions.class);
+        return transactions;
+    }
 
 
     // Show a list of top merchants where the user has spent the most.
