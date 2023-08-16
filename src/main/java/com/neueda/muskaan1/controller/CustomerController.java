@@ -1,4 +1,5 @@
 package com.neueda.muskaan1.controller;
+
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.service.CustomerService;
 
@@ -49,11 +50,10 @@ public class CustomerController {
     }
 
 
-
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
         Customer customer = customerService.getCustomerById(customerId);
-        if (customer==null) {
+        if (customer == null) {
             ErrorResponse errorResponse = new ErrorResponse("No customers found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
@@ -61,16 +61,17 @@ public class CustomerController {
     }
 
     @GetMapping("/name/{customerName}")
-    public ResponseEntity <?> getCustomerByName(@PathVariable String customerName) {
+    public ResponseEntity<?> getCustomerByName(@PathVariable String customerName) {
         List<Customer> customerList = customerService.getCustomerByName(customerName);
-           if (customerList.isEmpty()) {
-               ErrorResponse errorResponse = new ErrorResponse("No customers found");
-               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-           }
-           return ResponseEntity.ok(customerList);
+        if (customerList.isEmpty()) {
+            ErrorResponse errorResponse = new ErrorResponse("No customers found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
+        return ResponseEntity.ok(customerList);
+    }
+
     @GetMapping("/lastname/{customerLastName}")
-    public ResponseEntity <?> getCustomerByLastName(@PathVariable String customerLastName) {
+    public ResponseEntity<?> getCustomerByLastName(@PathVariable String customerLastName) {
         List<Customer> customerList = customerService.getCustomerByLastName(customerLastName);
         if (customerList.isEmpty()) {
             ErrorResponse errorResponse = new ErrorResponse("No customers found");
@@ -78,16 +79,19 @@ public class CustomerController {
         }
         return ResponseEntity.ok(customerList);
     }
+
     @GetMapping("/gender/{customerGender}")
-    public ResponseEntity <List<Customer>> getCustomerByGender(@PathVariable String customerGender) {
+    public ResponseEntity<List<Customer>> getCustomerByGender(@PathVariable String customerGender) {
         List<Customer> customerList = customerService.getCustomerByGender(customerGender);
         return ResponseEntity.ok(customerList);
     }
+
     @GetMapping("/job/{customerJob}")
-    public ResponseEntity <List<Customer>> getCustomerByJob(@PathVariable String customerJob) {
+    public ResponseEntity<List<Customer>> getCustomerByJob(@PathVariable String customerJob) {
         List<Customer> customerList = customerService.getCustomerByJob(customerJob);
         return ResponseEntity.ok(customerList);
     }
+
     @PutMapping("/{customerId}")
     public ResponseEntity<?> updateCustomer(
             @PathVariable int customerId, @Valid @RequestBody Customer updatedCustomer, BindingResult bindingResult) {
@@ -102,7 +106,6 @@ public class CustomerController {
         Customer updated = customerService.updateCustomer(customerId, updatedCustomer);
         return ResponseEntity.ok(updated);
     }
-
 
 
     @DeleteMapping("/{customerId}")

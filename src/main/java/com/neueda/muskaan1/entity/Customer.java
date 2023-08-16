@@ -1,12 +1,16 @@
 package com.neueda.muskaan1.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.Column;
+import javax.persistence.TemporalType;
 
 
 @Document("customer")
@@ -32,7 +36,7 @@ public class Customer {
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
     @Field("first")
     @Schema(example = "Andy")
-    private String firstName; 
+    private String firstName;
 
     @NotBlank(message = "Enter Last Name")
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid last name")
@@ -41,8 +45,8 @@ public class Customer {
     private String lastName;
 
     @NotBlank(message = "Enter Gender")
-    @Pattern(regexp = "^(Male|Female)$", message = "Gender must be 'Male' or 'Female'")
-    @Schema(example = "Male")
+    @Pattern(regexp = "^(M|F)$", message = "Specify 'M' for Male and 'F' for Female")
+    @Schema(example = "M")
     private String gender;
 
     @NotBlank(message = "Enter Job")
@@ -53,7 +57,6 @@ public class Customer {
     @NotBlank(message = "Date of birth is required")
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")
     @Schema(example = "1997-05-02")
-//    @Past(message = "Date of birth should be in the past")
     private String dob;
 
     public Customer() {
@@ -71,7 +74,6 @@ public class Customer {
         this.job = job;
         this.dob = dob;
     }
-
 
 
     public int getCustomerId() {
