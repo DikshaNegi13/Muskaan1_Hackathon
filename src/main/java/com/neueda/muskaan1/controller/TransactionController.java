@@ -50,7 +50,7 @@ public class TransactionController {
     }
 
     @GetMapping("/spendingByAmount/{low}/{high}")
-    public List<Transactions> getSpendingByAmount(@PathVariable double low ,@PathVariable double high ) {
+    public List<AmountSpending> getSpendingByAmount(@PathVariable double low ,@PathVariable double high ) {
         return transactionService.getSpendingHistoryByAmount(low,high);
     }
 
