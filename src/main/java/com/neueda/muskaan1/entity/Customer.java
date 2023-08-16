@@ -32,7 +32,7 @@ public class Customer {
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
     @Field("first")
     @Schema(example = "Andy")
-    private String firstName; //
+    private String firstName; 
 
     @NotBlank(message = "Enter Last Name")
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid last name")
