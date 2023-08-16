@@ -50,7 +50,7 @@ public class TransactionService {
     }
 
 
-    public List<AmountSpending> getSpendingHistoryByAmount(double low,double high) {
+    public List<Transactions> getSpendingHistoryByAmount(double low,double high) {
         return dao.getSpendingHistoryByAmount(low,high);
     }
 
