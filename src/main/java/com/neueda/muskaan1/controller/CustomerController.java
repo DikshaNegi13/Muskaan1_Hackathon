@@ -29,7 +29,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer, BindingResult bindingResult) {
+    public ResponseEntity<?> addCustomer( @RequestBody @Valid  Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ErrorResponse errorResponse = new ErrorResponse("Validation failed");
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -89,7 +89,7 @@ public class CustomerController {
     }
     @PutMapping("/{customerId}")
     public ResponseEntity<?> updateCustomer(
-            @PathVariable int customerId, @Valid @RequestBody Customer updatedCustomer, BindingResult bindingResult) {
+            @PathVariable int customerId ,@RequestBody @Valid Customer updatedCustomer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ErrorResponse errorResponse = new ErrorResponse("Validation failed");
             for (FieldError error : bindingResult.getFieldErrors()) {

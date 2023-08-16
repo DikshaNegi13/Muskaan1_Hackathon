@@ -95,12 +95,13 @@ public class TransactionMongoTemplate {
     }
 
     public List<AmountSpending> getSpendingHistoryByAmount(double low, double high) {
+//        Criteria criteria = new Criteria().orOperator(Criteria.where("amt").gte(low)), new Criteria().andOperator(Criteria.where("amt").lte(high));
 
         GroupOperation groupBySpendingTypeSumAmount = Aggregation.group("customerId").sum("amt").as("total_amt");
-        MatchOperation allAmountSpending = match(new Criteria("amt").gte(low).andOperator(Criteria.where("amt").lte(high)));
+        MatchOperation allAmountSpending = match(new Criteria("total_amt").gte(low).andOperator(Criteria.where("total_amt").lte(high)));
         /*           .sum(ConditionalOperators.when(Criteria.where("amt").gt(100)).then(1).otherwise(0)).as("highValue");
 */
-        ProjectionOperation projectSpendingTypeAndCount = Aggregation.project("amt", "customerId");
+        ProjectionOperation projectSpendingTypeAndCount = Aggregation.project("total_amt", "customerId");
                 //.andExpression("lowValue + highValue").as("totalSpending")
                 //.and(ConditionalOperators.when(Criteria.where("lowValue").gt(0)).then("Low").otherwise("High")).as("spendingType");
 
@@ -109,7 +110,7 @@ public class TransactionMongoTemplate {
                 .sum(ConditionalOperators.when(Criteria.where("spendingType").is("Low")).thenValueOf("lowValue").otherwise(0)).as("lowValue")
                 .sum(ConditionalOperators.when(Criteria.where("spendingType").is("High")).thenValueOf("highValue").otherwise(0)).as("highValue");
 */
-        SortOperation sortBySpendingType = Aggregation.sort(Sort.Direction.DESC, "customerId");
+        SortOperation sortBySpendingType = Aggregation.sort(Sort.Direction.DESC, "total_amt");
 
         Aggregation aggregation = Aggregation.newAggregation(
                 groupBySpendingTypeSumAmount,

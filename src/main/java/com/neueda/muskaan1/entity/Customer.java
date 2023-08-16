@@ -28,12 +28,12 @@ public class Customer {
     @Field("customer_id")
     private int customerId;
     @NotBlank(message = "Enter First Name")
-    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
+    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message = "Invalid first name")
     @Field("first")
     private String firstName;
 
     @NotBlank(message = "Enter Last Name")
-    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid last name")
+    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message = "Invalid last name")
     @Field("last")
     private String lastName;
 
@@ -42,8 +42,8 @@ public class Customer {
     private String gender;
 
     @NotBlank(message = "Enter Job")
-    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message   = "Invalid job status")
-    private String job;
+    @Pattern(regexp = "^[a-zA-Z\s.'-]*$", message   = "Invalid job status")
+    private String job ;
 
     @NotBlank(message = "Date of birth is required")
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")
