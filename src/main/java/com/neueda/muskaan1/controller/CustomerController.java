@@ -49,6 +49,7 @@ public class CustomerController {
     }
 
 
+
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
         Customer customer = customerService.getCustomerById(customerId);
@@ -101,6 +102,7 @@ public class CustomerController {
         Customer updated = customerService.updateCustomer(customerId, updatedCustomer);
         return ResponseEntity.ok(updated);
     }
+
 
 
     @DeleteMapping("/{customerId}")
