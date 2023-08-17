@@ -2,6 +2,7 @@ package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.dto.*;
 import com.neueda.muskaan1.entity.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,11 +13,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @Repository
-public class TransactionMongoTemplate {
+public class TransactionMongoTemplate  {
+    Logger LOGGER = Logger.getLogger("TransactionMongoTemplate");
 
     @Autowired
     private MongoTemplate mongoTemplate;
