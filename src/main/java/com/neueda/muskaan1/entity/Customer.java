@@ -1,7 +1,6 @@
 package com.neueda.muskaan1.entity;
 import com.neueda.muskaan1.validation.*;
 
-import com.neueda.muskaan1.util.ValidDateOfBirth;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Digits;
@@ -9,10 +8,10 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Document("customer")
@@ -35,6 +34,7 @@ public class Customer {
     @Field("customer_id")
     @UniqueCustomerId(message = "CustomerId must be unique")
     @Digits(integer = 10, fraction = 0, message = "CustomerId must be a valid integer")
+    @Indexed(unique = true)
     private int customerId;
     @NotBlank(message = "Enter First Name")
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
@@ -58,13 +58,11 @@ public class Customer {
     @Schema(example = "Lawyer")
     private String job;
 
- /*   @NotBlank(message = "Date of birth is required")
+    @NotBlank(message = "Date of birth is required")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past(message="Date of birth must be in the past")
-//    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")*/
-   //@Schema(example = "1997-05-02")
+    @Schema(example = "1997-05-02")
 
-  @ValidDateOfBirth
+
     private String dob;
 
     public Customer() {
