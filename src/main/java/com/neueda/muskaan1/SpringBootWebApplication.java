@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @SpringBootApplication
-@Validated
+
 public class SpringBootWebApplication implements CommandLineRunner {
 	static Logger logger= Logger.getLogger(SpringBootWebApplication.class.getSimpleName());
 

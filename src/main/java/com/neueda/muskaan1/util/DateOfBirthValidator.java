@@ -18,7 +18,6 @@ public class DateOfBirthValidator implements ConstraintValidator<ValidDateOfBirt
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
-
         try {
             Date dobDate = dateFormat.parse(dob);
             Date currentDate = new Date();

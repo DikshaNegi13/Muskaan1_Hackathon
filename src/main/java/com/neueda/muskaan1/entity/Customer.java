@@ -8,7 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 
 
@@ -44,8 +44,8 @@ public class Customer {
     private String lastName;
 
     @NotBlank(message = "Enter Gender")
-    @Pattern(regexp = "^(Male|Female)$", message = "Gender must be 'Male' or 'Female'")
-    @Schema(example = "Male")
+    @Pattern(regexp = "^(M|F)$", message = "Gender must be 'M' or 'F'")
+    @Schema(example = "M")
     private String gender;
 
     @NotBlank(message = "Enter Job")
@@ -57,9 +57,9 @@ public class Customer {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message="Date of birth must be in the past")
 //    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")*/
-   @Schema(example = "1997-05-02")
+   //@Schema(example = "1997-05-02")
 
-    @ValidDateOfBirth
+  @ValidDateOfBirth
     private String dob;
 
     public Customer() {
