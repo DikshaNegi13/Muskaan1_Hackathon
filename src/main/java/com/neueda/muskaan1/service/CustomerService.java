@@ -29,20 +29,7 @@ public Customer addCustomer(Customer customer) throws CustomerAlreadyExists {
     return repo.save(customer);
 }
 
-    private boolean isCustomerIdValid(String customerId) {
-        try {
-            int parsedCustomerId = Integer.parseInt(customerId);
-            return parsedCustomerId > 0;
-        } catch (NumberFormatException e) {
-            return false; // Parsing failed, not a valid integer
-        }
-    }
 
-
-
-    public long getCount(){
-       return this.repo.count();
-        }
     public List<Customer>getAllCustomer(){
         return this.repo.findAll();
     }
@@ -74,8 +61,8 @@ public Customer addCustomer(Customer customer) throws CustomerAlreadyExists {
 
     public Customer getCustomerById(int  customerId)  {
         System.out.println(customerId + "Printing");
-        Customer c = repo.findByCustomerId(customerId);
-        return c;
+        Customer customer = repo.findByCustomerId(customerId);
+        return customer;
     }
 
     public List<Customer> getCustomerByName(String customerName)  {
@@ -85,25 +72,18 @@ public Customer addCustomer(Customer customer) throws CustomerAlreadyExists {
     }
     public List<Customer> getCustomerByGender(String customerGender)  {
 
-        List<Customer> customerList = repo.findByGender(customerGender);
-        return customerList;
+        List<Customer> customerListByGender = repo.findByGender(customerGender);
+        return customerListByGender;
     }
     public List<Customer> getCustomerByJob(String customerJob)  {
 
-        List<Customer> customerList = repo.findByJob(customerJob);
-        return customerList;
+        List<Customer> customerListByJob = repo.findByJob(customerJob);
+        return customerListByJob;
     }
     public List<Customer> getCustomerByLastName(String customerLastName)  {
         System.out.println(customerLastName + " Printing from service class");
-        List<Customer> customerList = repo.findByLastName(customerLastName);
-        return customerList;
+        List<Customer> customerListByLast = repo.findByLastName(customerLastName);
+        return customerListByLast;
     }
-
-
-    public boolean existsByCustomerId(int customerId) {
-        return repo.existsByCustomerId(customerId);
-    }
-
-
 
 }
