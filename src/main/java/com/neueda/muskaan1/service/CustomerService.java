@@ -3,7 +3,6 @@ package com.neueda.muskaan1.service;
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.exception.*;
 import com.neueda.muskaan1.dao.ICustomerRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class CustomerService {
 //            throw new CustomerAlreadyExists("Customer with " + c.getCustomerId() + " already exists");
 //        return repo.save(c);
 //        }
-public Customer addCustomer(@Valid Customer customer) throws CustomerAlreadyExists {
+public Customer addCustomer(Customer customer) throws CustomerAlreadyExists {
     if (!isCustomerIdValid(String.valueOf(customer.getCustomerId()))) {
         throw new InvalidDataTypeException(String.valueOf(customer.getCustomerId()),"Invalid customerId. Please provide a valid integer value.");
     }
@@ -50,15 +49,17 @@ public Customer addCustomer(@Valid Customer customer) throws CustomerAlreadyExis
     public List<Customer>getAllCustomer(){
         return this.repo.findAll();
     }
-    public Customer updateCustomer(int customerId, @Valid Customer dataToUpdate) {
+    public Customer updateCustomer(int customerId, Customer dataToUpdate) {
         Customer existingCustomer = repo.findByCustomerId(customerId);
         if (existingCustomer != null) {
+            existingCustomer.setCustomerId(dataToUpdate.getCustomerId());
+            existingCustomer.setFirstName(dataToUpdate.getFirstName());
+            existingCustomer.setLastName(dataToUpdate.getLastName());
+            existingCustomer.setGender(dataToUpdate.getGender());
+            existingCustomer.setJob(dataToUpdate.getJob());
+            existingCustomer.setDob(dataToUpdate.getDob());
 
-            // Ensures customerId is unchanged
-            dataToUpdate.setCustomerId(existingCustomer.getCustomerId());
-            // It takes the original customerId
-
-            return repo.save(dataToUpdate);
+            return repo.save(existingCustomer);
         } else {
             System.out.println("Customer not found");
             return null;

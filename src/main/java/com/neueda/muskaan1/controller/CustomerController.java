@@ -108,6 +108,7 @@ public class CustomerController {
     }
 
 
+
     @DeleteMapping("/{customerId}")
     public ResponseEntity<?> deleteCustomer( @Valid @PathVariable int customerId) {
         customerService.deleteCustomer(customerId);
