@@ -43,10 +43,8 @@ public class TransactionService {
         return dao.getSpendingHistoryByState();
     }
 
-    public List<Transactions> getPopulationByCity(String city) {
-        System.out.println(city + " Printing from service class");
-        List<Transactions> customerList = transactionRepo.findByCity(city);
-        return customerList;
+    public List<CityPopulation> getSpendingHistoryByPopulation() {
+       return dao.getSpendingHistoryByPopulation();
     }
 
 

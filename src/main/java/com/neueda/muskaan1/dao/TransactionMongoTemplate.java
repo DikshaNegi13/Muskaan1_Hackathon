@@ -2,6 +2,7 @@ package com.neueda.muskaan1.dao;
 
 import com.neueda.muskaan1.dto.*;
 import com.neueda.muskaan1.entity.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,11 +13,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @Repository
-public class TransactionMongoTemplate {
+public class TransactionMongoTemplate  {
+    Logger LOGGER = Logger.getLogger("TransactionMongoTemplate");
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -31,6 +34,19 @@ public class TransactionMongoTemplate {
         Aggregation aggregation = newAggregation(allCategory, groupByCategorySumAmount, sortByAmtDESC, includes);
         AggregationResults<CategoryAmount> groupResults = mongoTemplate.aggregate(aggregation, "transaction", CategoryAmount.class);
         List<CategoryAmount> result = groupResults.getMappedResults();
+        return result;
+
+
+    }
+    public List<CityPopulation> getSpendingHistoryByPopulation() {
+        GroupOperation groupByPopulationSumAmount = group("city").sum("amt").as("total_amt").first("city_population").as("cityPopulation");
+        MatchOperation allPopulation = match(new Criteria("city").exists(true));
+        ProjectionOperation includes = project("total_amt").andInclude("cityPopulation").and("city").previousOperation();
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation = newAggregation(allPopulation, groupByPopulationSumAmount, sortByAmtDESC, includes);
+        AggregationResults<CityPopulation> groupResults = mongoTemplate.aggregate(aggregation, "transaction", CityPopulation.class);
+        List<CityPopulation> result = groupResults.getMappedResults();
         return result;
 
 
@@ -131,7 +147,8 @@ public class TransactionMongoTemplate {
         ProjectionOperation includes = project("total_amt").andInclude("city").andInclude("state").andInclude("cityPopulation").and("merchant").previousOperation();
         SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
-        Aggregation aggregation = newAggregation(allMerchant, groupByTopMerchantSumAmount, sortByAmtDESC, includes);
+        Aggregation aggregation = newAggregation(allMerchant, groupByTopMerchantSumAmount, sortByAmtDESC, includes,Aggregation.limit(limit));
+
         AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction",TopMerchant.class);
         List<TopMerchant> result = groupResults.getMappedResults();
         return result;
