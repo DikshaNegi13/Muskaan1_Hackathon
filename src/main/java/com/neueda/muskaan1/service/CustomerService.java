@@ -81,5 +81,10 @@ public class CustomerService {
     }
 
 
+    public boolean existsByCustomerId(int customerId) {
+        return repo.existsByCustomerId(customerId);
+    }
+
+
 
 }

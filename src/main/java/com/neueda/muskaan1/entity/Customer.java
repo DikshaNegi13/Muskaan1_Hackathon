@@ -1,7 +1,10 @@
 package com.neueda.muskaan1.entity;
+import com.neueda.muskaan1.validation.*;
+
 import com.neueda.muskaan1.util.ValidDateOfBirth;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import org.bson.types.ObjectId;
@@ -30,6 +33,8 @@ public class Customer {
     ObjectId id;
 
     @Field("customer_id")
+    @UniqueCustomerId(message = "CustomerId must be unique")
+    @Digits(integer = 10, fraction = 0, message = "CustomerId must be a valid integer")
     private int customerId;
     @NotBlank(message = "Enter First Name")
     @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "Invalid first name")
@@ -49,7 +54,7 @@ public class Customer {
     private String gender;
 
     @NotBlank(message = "Enter Job")
-    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message   = "Invalid job status")
+    @Pattern(regexp = "^[a-zA-Z\\s,\\-()/]+$", message   = "Invalid job status")
     @Schema(example = "Lawyer")
     private String job;
 
