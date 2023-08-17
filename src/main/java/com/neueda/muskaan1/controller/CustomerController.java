@@ -3,7 +3,7 @@ package com.neueda.muskaan1.controller;
 import com.neueda.muskaan1.entity.Customer;
 import com.neueda.muskaan1.service.CustomerService;
 
-import com.neueda.muskaan1.exception.CustomerAlreadyExists;
+import com.neueda.muskaan1.exception.*;
 import com.neueda.muskaan1.validation.ErrorResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,7 @@ public class CustomerController {
         return customerService.getAllCustomer();
     }
 
+
     @PostMapping
     public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -42,15 +43,15 @@ public class CustomerController {
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
-        if (!isCustomerIdValid(String.valueOf(customer.getCustomerId()))) {
-            ErrorResponse errorResponse = new ErrorResponse("Invalid customerId data type");
-            errorResponse.addValidationError("customerId", "Wrong data type entered");
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
-
         try {
+            int customerId = Integer.parseInt(String.valueOf(customer.getCustomerId()));
+            // If parsing is successful, continue with adding the customer
             Customer savedCustomer = customerService.addCustomer(customer);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
+        } catch (NumberFormatException e) {
+            ErrorResponse errorResponse = new ErrorResponse("Invalid customerId data type");
+            errorResponse.addValidationError("customerId", "Wrong data type input, expected integer");
+            return ResponseEntity.badRequest().body(errorResponse);
         } catch (CustomerAlreadyExists e) {
             ErrorResponse errorResponse = new ErrorResponse("Customer already exists");
             errorResponse.addValidationError("customerId", e.getMessage());
@@ -58,17 +59,14 @@ public class CustomerController {
         }
     }
 
-
-    private boolean isCustomerIdValid(String customerId) {
-        System.out.println(customerId);
+    private boolean isCustomerIdValid(String customerId) throws InvalidInputException {
         try {
             int parsedCustomerId = Integer.parseInt(customerId);
             return parsedCustomerId > 0;
         } catch (NumberFormatException e) {
-            return false; // Parsing failed, not a valid integer
+            throw new InvalidInputException("Wrong data type input, expected integer");
         }
     }
-
 
 
     @GetMapping("/customer/{customerId}")
