@@ -36,9 +36,9 @@ public class TransactionController {
         return transactionService.getSpendingHistoryByCategory();
     }
 
-    @GetMapping("/city_population")
-    public <city_population> List<Transactions> getPopulationByCity(String city) {
-        return transactionService.getPopulationByCity(city);
+    @GetMapping("/cityPopulation")
+    public List <CityPopulation> getSpendingHistoryByPopulation() {
+        return transactionService.getSpendingHistoryByPopulation();
     }
 
     @GetMapping("/{state}")

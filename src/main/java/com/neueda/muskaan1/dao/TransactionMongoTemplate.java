@@ -35,6 +35,19 @@ public class TransactionMongoTemplate {
 
 
     }
+    public List<CityPopulation> getSpendingHistoryByPopulation() {
+        GroupOperation groupByPopulationSumAmount = group("city").sum("amt").as("total_amt").first("city_population").as("cityPopulation");
+        MatchOperation allPopulation = match(new Criteria("city").exists(true));
+        ProjectionOperation includes = project("total_amt").andInclude("cityPopulation").and("city").previousOperation();
+        SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
+
+        Aggregation aggregation = newAggregation(allPopulation, groupByPopulationSumAmount, sortByAmtDESC, includes);
+        AggregationResults<CityPopulation> groupResults = mongoTemplate.aggregate(aggregation, "transaction", CityPopulation.class);
+        List<CityPopulation> result = groupResults.getMappedResults();
+        return result;
+
+
+    }
 
     public List<MerchantAmount> getAmountForMerchant() {
         GroupOperation groupByMerchantSumAmount = group("merchant").sum("amt").as("total_amt");
@@ -131,8 +144,8 @@ public class TransactionMongoTemplate {
         ProjectionOperation includes = project("total_amt").andInclude("city").andInclude("state").andInclude("cityPopulation").and("merchant").previousOperation();
         SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
-        Aggregation aggregation = newAggregation(allMerchant, groupByTopMerchantSumAmount, sortByAmtDESC, includes);
-        Aggregation.limit(limit);
+        Aggregation aggregation = newAggregation(allMerchant, groupByTopMerchantSumAmount, sortByAmtDESC, includes,Aggregation.limit(limit));
+
         AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction",TopMerchant.class);
         List<TopMerchant> result = groupResults.getMappedResults();
         return result;
