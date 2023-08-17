@@ -1,11 +1,10 @@
 package com.neueda.muskaan1.entity;
 import com.neueda.muskaan1.validation.*;
 
-import com.neueda.muskaan1.util.ValidDateOfBirth;
+//import com.neueda.muskaan1.util.ValidDateOfBirth;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -64,7 +63,7 @@ public class Customer {
 //    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date of birth should be in yyyy-MM-dd format")*/
    //@Schema(example = "1997-05-02")
 
-  @ValidDateOfBirth
+//  @ValidDateOfBirth
     private String dob;
 
     public Customer() {
@@ -88,6 +87,7 @@ public class Customer {
     public int getCustomerId() {
         return customerId;
     }
+
 
     public void setCustomerId(int  customerId) {
         this.customerId = customerId;
