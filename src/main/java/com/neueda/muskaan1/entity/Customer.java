@@ -1,8 +1,12 @@
 package com.neueda.muskaan1.entity;
 import com.neueda.muskaan1.validation.*;
 
+
+//import com.neueda.muskaan1.util.ValidDateOfBirth;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Digits;
+
 import jakarta.validation.constraints.Pattern;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -60,7 +64,6 @@ public class Customer {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Schema(example = "1997-05-02")
 
-
     private String dob;
 
     public Customer() {
@@ -84,6 +87,7 @@ public class Customer {
     public int getCustomerId() {
         return customerId;
     }
+
 
     public void setCustomerId(int  customerId) {
         this.customerId = customerId;

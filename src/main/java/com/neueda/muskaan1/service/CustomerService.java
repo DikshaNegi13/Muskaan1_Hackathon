@@ -15,11 +15,32 @@ public class CustomerService {
     @Autowired
     private ICustomerRepository repo;
 
-    public Customer addCustomer(@Valid Customer c) throws CustomerAlreadyExists {
-        if (repo.existsById((c.getId())))
-            throw new CustomerAlreadyExists("Customer with " + c.getCustomerId() + " already exists");
-        return repo.save(c);
+//    public Customer addCustomer(@Valid Customer c) throws CustomerAlreadyExists {
+//        if (repo.existsById((c.getId())))
+//            throw new CustomerAlreadyExists("Customer with " + c.getCustomerId() + " already exists");
+//        return repo.save(c);
+//        }
+public Customer addCustomer(@Valid Customer customer) throws CustomerAlreadyExists {
+    if (!isCustomerIdValid(String.valueOf(customer.getCustomerId()))) {
+        throw new InvalidDataTypeException(String.valueOf(customer.getCustomerId()),"Invalid customerId. Please provide a valid integer value.");
+    }
+
+    if (repo.existsByCustomerId(customer.getCustomerId())) {
+        throw new CustomerAlreadyExists("Customer with ID " + customer.getCustomerId() + " already exists.");
+    }
+
+    // Add the customer
+    return repo.save(customer);
+}
+
+    private boolean isCustomerIdValid(String customerId) {
+        try {
+            int parsedCustomerId = Integer.parseInt(customerId);
+            return parsedCustomerId > 0;
+        } catch (NumberFormatException e) {
+            return false; // Parsing failed, not a valid integer
         }
+    }
 
 
 
