@@ -20,9 +20,6 @@ public class CustomerService {
 //        return repo.save(c);
 //        }
 public Customer addCustomer(Customer customer) throws CustomerAlreadyExists {
-    if (!isCustomerIdValid(String.valueOf(customer.getCustomerId()))) {
-        throw new InvalidDataTypeException(String.valueOf(customer.getCustomerId()),"Invalid customerId. Please provide a valid integer value.");
-    }
 
     if (repo.existsByCustomerId(customer.getCustomerId())) {
         throw new CustomerAlreadyExists("Customer with ID " + customer.getCustomerId() + " already exists.");
