@@ -68,7 +68,7 @@ public Customer addCustomer(@Valid Customer customer) throws CustomerAlreadyExis
     public void deleteCustomer(int customerId){
         Customer c =repo.findByCustomerId(customerId);
         if(c!=null){
-            repo.save(c);
+            repo.delete(c);
         }
         else
             System.out.println("not found");
