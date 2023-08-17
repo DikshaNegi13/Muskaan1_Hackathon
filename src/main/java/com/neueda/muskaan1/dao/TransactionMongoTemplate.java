@@ -132,6 +132,7 @@ public class TransactionMongoTemplate {
         SortOperation sortByAmtDESC = sort(Sort.by(Sort.Direction.DESC, "total_amt"));
 
         Aggregation aggregation = newAggregation(allMerchant, groupByTopMerchantSumAmount, sortByAmtDESC, includes);
+        Aggregation.limit(limit);
         AggregationResults<TopMerchant> groupResults = mongoTemplate.aggregate(aggregation, "transaction",TopMerchant.class);
         List<TopMerchant> result = groupResults.getMappedResults();
         return result;
