@@ -30,7 +30,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCustomer( @RequestBody @Valid  Customer customer, BindingResult bindingResult) {
+    public ResponseEntity<?> addCustomer( @Valid @RequestBody  Customer customer, @Valid BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ErrorResponse errorResponse = new ErrorResponse("Validation failed");
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -51,7 +51,7 @@ public class CustomerController {
 
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<?> getCustomerById(@PathVariable int customerId) {
+    public ResponseEntity<?> getCustomerById(@Valid @PathVariable  int customerId) {
         Customer customer = customerService.getCustomerById(customerId);
         if (customer == null) {
             ErrorResponse errorResponse = new ErrorResponse("No customers found");
@@ -61,7 +61,7 @@ public class CustomerController {
     }
 
     @GetMapping("/name/{customerName}")
-    public ResponseEntity<?> getCustomerByName(@PathVariable String customerName) {
+    public ResponseEntity<?> getCustomerByName(@Valid @PathVariable String customerName) {
         List<Customer> customerList = customerService.getCustomerByName(customerName);
         if (customerList.isEmpty()) {
             ErrorResponse errorResponse = new ErrorResponse("No customers found");
@@ -71,7 +71,7 @@ public class CustomerController {
     }
 
     @GetMapping("/lastname/{customerLastName}")
-    public ResponseEntity<?> getCustomerByLastName(@PathVariable String customerLastName) {
+    public ResponseEntity<?> getCustomerByLastName(@Valid @PathVariable  String customerLastName) {
         List<Customer> customerList = customerService.getCustomerByLastName(customerLastName);
         if (customerList.isEmpty()) {
             ErrorResponse errorResponse = new ErrorResponse("No customers found");
@@ -81,20 +81,20 @@ public class CustomerController {
     }
 
     @GetMapping("/gender/{customerGender}")
-    public ResponseEntity<List<Customer>> getCustomerByGender(@PathVariable String customerGender) {
+    public ResponseEntity<List<Customer>> getCustomerByGender( @Valid  @PathVariable String customerGender) {
         List<Customer> customerList = customerService.getCustomerByGender(customerGender);
         return ResponseEntity.ok(customerList);
     }
 
     @GetMapping("/job/{customerJob}")
-    public ResponseEntity<List<Customer>> getCustomerByJob(@PathVariable String customerJob) {
+    public ResponseEntity<List<Customer>> getCustomerByJob( @Valid @PathVariable  String customerJob) {
         List<Customer> customerList = customerService.getCustomerByJob(customerJob);
         return ResponseEntity.ok(customerList);
     }
 
     @PutMapping("/{customerId}")
     public ResponseEntity<?> updateCustomer(
-            @PathVariable int customerId ,@RequestBody @Valid Customer updatedCustomer, BindingResult bindingResult) {
+            @Valid @PathVariable int customerId , @Valid @RequestBody Customer updatedCustomer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ErrorResponse errorResponse = new ErrorResponse("Validation failed");
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -109,7 +109,7 @@ public class CustomerController {
 
 
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
+    public ResponseEntity<?> deleteCustomer( @Valid @PathVariable int customerId) {
         customerService.deleteCustomer(customerId);
         return ResponseEntity.noContent().build();
     }
