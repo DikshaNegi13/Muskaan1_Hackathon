@@ -13,9 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 //import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
 
@@ -33,18 +30,12 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer, BindingResult bindingResult) {
+    public ResponseEntity<?> addCustomer( @Valid @RequestBody  Customer customer, @Valid BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ErrorResponse errorResponse = new ErrorResponse("Validation failed");
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errorResponse.addValidationError(error.getField(), error.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
-
-        if (!isCustomerIdValid(String.valueOf(customer.getCustomerId()))) {
-            ErrorResponse errorResponse = new ErrorResponse("Invalid customerId data type");
-            errorResponse.addValidationError("customerId", "Wrong data type entered");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
@@ -57,18 +48,6 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
     }
-
-
-    private boolean isCustomerIdValid(String customerId) {
-        System.out.println(customerId);
-        try {
-            int parsedCustomerId = Integer.parseInt(customerId);
-            return parsedCustomerId > 0;
-        } catch (NumberFormatException e) {
-            return false; // Parsing failed, not a valid integer
-        }
-    }
-
 
 
     @GetMapping("/customer/{customerId}")
